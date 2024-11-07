@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "fast-api"
+version = "0.1.0"
+description = ""
+authors = ["Vitaliy Lobko <vitaliy.lobko@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.4"
+uvicorn = {extras = ["standart"], version = "^0.32.0"}
+sqlalchemy = "^2.0.36"
+alembic = "^1.14.0"
+faker = "^30.8.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
