@@ -12,6 +12,8 @@ uvicorn = {extras = ["standart"], version = "^0.32.0"}
 sqlalchemy = "^2.0.36"
 alembic = "^1.14.0"
 faker = "^30.8.2"
+pydantic = {extras = ["email"], version = "^2.9.2"}
+psycopg2 = "^2.9.10"
 
 
 [build-system]
