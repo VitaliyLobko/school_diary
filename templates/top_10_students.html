@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="full-width-block">
+    <section class="main-content">
+        <div class="container my-5">
+            <h2>{{title}}</h2>
+            <div class="row d-flex justify-content-center">
+                {% for student in students %}
+                <div class="col-lg-4 col-sm-6 mb-3">
+                    <div class="product-card">
+                        <div class="product-thumb">
+                            <a href=""><img src="../static/no_foto.jpg" alt=""></a>
+                        </div>
+                        <div class="product-details d-flex justify-content-between">
+                            <h3><a href="#">{{ student.full_name }}</a></h3>
+                            <h2><a href="#" class='text-danger'>{{ student.avg_grade }}</a></h2>
+                        </div>
+                        <div class="product-center-details">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium, blanditiis
+                                ducimus
+                                facilis`
+                                fugit hic id inventore magni nisi quaerat, repudiandae totam velit. Aliquam amet
+                                asperiores
+                                blanditiis cum itaque, reprehenderit voluptate?</p>
+                        </div>
+
+                        <div class="product-bottom-details d-flex justify-content-between">
+                            <h4>{{ student.group_name }}</h4>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</div>
+
+
+{% endblock %}

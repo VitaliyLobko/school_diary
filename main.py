@@ -1,3 +1,4 @@
+import pathlib
 import time
 from _pydatetime import date
 from datetime import datetime, timedelta
@@ -5,9 +6,13 @@ from random import choice, randint
 import uvicorn
 from faker import Faker
 from fastapi import FastAPI, Depends, HTTPException, Request
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from sqlalchemy import text
+from starlette.responses import JSONResponse, HTMLResponse
+
 from src.database.models import Teacher, Student, Discipline, Grade, Group
 from src.database.db import get_db
 from src.routes import students
@@ -25,6 +30,15 @@ def date_range(start: date, end: date) -> list:
 
 app = FastAPI()
 
+BASE_DIR = pathlib.Path(__file__).parent
+
+templates = Jinja2Templates(directory='templates')
+app.mount("/static", StaticFiles(directory=BASE_DIR / 'static'), name="static")
+
+app.include_router(students.router)
+
+
+
 
 @app.middleware('http')
 async def custom_middleware(request: Request, call_next):
@@ -35,16 +49,13 @@ async def custom_middleware(request: Request, call_next):
     return response
 
 
-app.include_router(students.router, prefix='/api')
-
-
 # app.include_router(teachers.router, prefix='/api')
 # app.include_router(groups.router, prefix='/api')
 
 
-@app.get("/")
-async def root():
-    return {"message": "Hello world!"}
+@app.get("/", response_class=HTMLResponse)
+async def root(request: Request):
+    return templates.TemplateResponse('index.html', {"request": request, "title": "Home App"})
 
 
 @app.get("/healthchecker")
@@ -80,7 +91,8 @@ async def seed(db: Session = Depends(get_db)):
 
     def seed_teachers():
         for _ in range(number_of_teachers):
-            teacher = Teacher(first_name=fake.first_name(), last_name=fake.last_name(), dob=fake.date_of_birth(None, 18, 60))
+            teacher = Teacher(first_name=fake.first_name(), last_name=fake.last_name(),
+                              dob=fake.date_of_birth(None, 18, 60))
             db.add(teacher)
         db.commit()
 
@@ -98,7 +110,8 @@ async def seed(db: Session = Depends(get_db)):
     def seed_students():
         group_ids = db.scalars(select(Group.id)).all()
         for _ in range(number_of_students):
-            student = Student(first_name=fake.first_name(), last_name=fake.last_name(), group_id=choice(group_ids), dob=fake.date_of_birth(None, 18, 60))
+            student = Student(first_name=fake.first_name(), last_name=fake.last_name(), group_id=choice(group_ids),
+                              dob=fake.date_of_birth(None, 18, 60))
             db.add(student)
         db.commit()
 
@@ -134,4 +147,4 @@ async def seed(db: Session = Depends(get_db)):
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="127.0.0.1", port=8000)
+    uvicorn.run("main:app", host="127.0.0.1", port=8001)

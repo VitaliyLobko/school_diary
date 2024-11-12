@@ -35,7 +35,6 @@ class StudentsResponseWithAvgGrade(BaseModel):
     full_name: str
     dob: datetime
     group_id: int
-    group_name: str
     avg_grade: float
     created_at: datetime
     updated_at: datetime

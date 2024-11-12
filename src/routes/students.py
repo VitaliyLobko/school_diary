@@ -1,5 +1,8 @@
+import pathlib
 from typing import List
-from fastapi import Depends, HTTPException, status, Path, APIRouter, Query
+from fastapi import Depends, HTTPException, status, Path, APIRouter, Query, Request, FastAPI
+from fastapi.templating import Jinja2Templates
+from starlette.staticfiles import StaticFiles
 from starlette.status import HTTP_201_CREATED
 from sqlalchemy.orm import Session
 from src.database.db import get_db
@@ -9,6 +12,8 @@ from src.repository import students as repository_students
 
 router = APIRouter(prefix="/students", tags=['students'])
 
+templates = Jinja2Templates(directory='templates')
+
 
 @router.post("/", status_code=HTTP_201_CREATED, name="Create student")
 async def create_student(body: StudentModel, db: Session = Depends(get_db)):
@@ -16,27 +21,39 @@ async def create_student(body: StudentModel, db: Session = Depends(get_db)):
     return student
 
 
-@router.get("/", response_model=List[StudentsResponse], name="List of all students")
-async def get_students(limit: int = Query(10, le=500), offset: int = 0, db: Session = Depends(get_db)):
+@router.get("/", response_model=List[StudentsResponse], name="List of all students", )
+async def get_students(request: Request, limit: int = Query(20, le=500), offset: int = 0,
+                       db: Session = Depends(get_db)):
     students = await  repository_students.get_students(limit, offset, db)
     if students is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='not found')
-    return students
+    return templates.TemplateResponse('students.html', {'request': request, 'students': students, 'title': 'Students'})
 
-@router.get("/avg_grade",  response_model=List[StudentsResponseWithAvgGrade],  name="List of all students sorting by avg grade")
-async def get_students_avg_grade(limit: int = Query(10, le=500), offset: int = 0, db: Session = Depends(get_db)):
+
+
+@router.get("/top_10_students", tags=['students'])
+async def top_10_students(request: Request, db: Session = Depends(get_db)):
+    students = await repository_students.get_top_10_students(db)
+    if students is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='not found')
+    return templates.TemplateResponse('top_10_students.html', {'request': request, 'students': students, 'title': 'Top 10 students'})
+
+@router.get("/avg_grade", response_model=List[StudentsResponseWithAvgGrade],
+            name="List of all students sorting by avg grade")
+async def get_students_avg_grade(request: Request, limit: int = Query(20, le=500), offset: int = 0,
+                                 db: Session = Depends(get_db)):
     students = await  repository_students.get_students_avg_grade(limit, offset, db)
     if students is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='not found')
-    return students
+    return templates.TemplateResponse('students_with_grades.html', {'request': request, 'students': students, 'title': 'Avg grades'})
 
 
 @router.get("/{student_id}", response_model=StudentsResponse, name="Get student by id")
-async def get_student(student_id: int = Path(ge=1), db: Session = Depends(get_db)):
+async def get_student(request: Request, student_id: int = Path(ge=1), db: Session = Depends(get_db)):
     student = await repository_students.get_student_by_id(student_id, db)
     if student is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='not found')
-    return student
+    return templates.TemplateResponse('student.html', {'request': request, 'student': student, 'title': 'Students'})
 
 
 @router.put("/{student_id}", name="Update student by id")
@@ -62,11 +79,4 @@ async def delete_student(student_id: int = Path(ge=1), db: Session = Depends(get
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='not found')
     return student
 
-#
-# @app.get("/top_5_students", response_model=List[StudentsResponse], tags=['students'])
-# async def top_5_students(db: Session = Depends(get_db)):
-#     result = db.query(Student.id, Student.fullname, func.round(func.avg(Grade.grade), 2).label('avg_grade'),
-#                       Group.name).select_from(Grade).join(Student).join(Group).group_by(Student.id).order_by(
-#         desc(func.avg(Grade.grade))).limit(5).all()
-#
-#     return (result)
+

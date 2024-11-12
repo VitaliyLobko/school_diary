@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Date, Boolean, func, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, Date, Boolean, func, DateTime, event
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship, declarative_base
 from src.database.db import engine
@@ -10,8 +10,8 @@ class Teacher(Base):
     __tablename__ = 'teachers'
     id = Column(Integer, primary_key=True)
     is_active = Column(Boolean, default=True)
-    first_name = Column(String(120), default = 'None')
-    last_name = Column(String(120), default = 'None')
+    first_name = Column(String(120), default='None')
+    last_name = Column(String(120), default='None')
     dob = Column(Date, nullable=True)
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
@@ -33,8 +33,8 @@ class Student(Base):
     __tablename__ = 'students'
     id = Column(Integer, primary_key=True)
     is_active = Column(Boolean, default=True)
-    first_name = Column(String(120), default = 'None')
-    last_name = Column(String(120), default = 'None')
+    first_name = Column(String(120), default='None')
+    last_name = Column(String(120), default='None')
     dob = Column(Date, nullable=True)
     group_id = Column('group_id', ForeignKey('groups.id', ondelete='CASCADE'))
     group = relationship('Group', backref='students')
@@ -68,9 +68,14 @@ class Grade(Base):
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
-
-# @event.listens_for(Todo, 'before_update')
-# def update_updated_at(mapper, conn, target):
-#     target.updated_at = func.now()
-
-
+#
+# @event.listens_for(Teacher, 'before_update')
+# def update_is_active(mapper, conn, target):
+#     if target.teacher_id == 1:
+#         target.is_active = False
+#
+#
+# @event.listens_for(Teacher, 'before_insert')
+# def update_is_active(mapper, conn, target):
+#     if target.teacher_id == 1:
+#         target.is_active = False

@@ -16,9 +16,20 @@ async def get_students(limit, offset, db: Session):
     students = db.query(Student).order_by(Student.full_name).limit(limit).offset(offset).all()
     return students
 
+
+async def get_top_10_students(db: Session):
+    students = db.query(Student.id, Student.full_name, func.round(func.avg(Grade.grade), 2).label('avg_grade'),
+                        Group.name.label('group_name'), Student.created_at, Student.updated_at, Student.is_active) \
+        .select_from(Student).join(Group).join(Grade).group_by(
+        Student.id, Group.id).order_by(desc(func.avg(Grade.grade))).limit(10).all()
+    return students
+
+
 async def get_students_avg_grade(limit, offset, db: Session):
-    students = db.query(Student.id, Student.full_name, Student.dob, func.round(func.avg(Grade.grade), 2).label('avg_grade'),
-                        Group.id.label('group_id'), Group.name.label('group_name'), Student.created_at, Student.updated_at, Student.is_active) \
+    students = db.query(Student.id, Student.full_name, Student.dob,
+                        func.round(func.avg(Grade.grade), 2).label('avg_grade'),
+                        Group.id.label('group_id'), Group.name.label('group_name'), Student.created_at,
+                        Student.updated_at, Student.is_active) \
         .select_from(Student).join(Group).join(Grade).group_by(
         Student.id, Group.id).order_by(desc(func.avg(Grade.grade))).limit(limit).offset(offset).all()
     return students
