@@ -30,13 +30,14 @@ async def get_students(request: Request, limit: int = Query(20, le=500), offset:
     return templates.TemplateResponse('students.html', {'request': request, 'students': students, 'title': 'Students'})
 
 
-
 @router.get("/top_10_students", tags=['students'])
 async def top_10_students(request: Request, db: Session = Depends(get_db)):
     students = await repository_students.get_top_10_students(db)
     if students is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='not found')
-    return templates.TemplateResponse('top_10_students.html', {'request': request, 'students': students, 'title': 'Top 10 students'})
+    return templates.TemplateResponse('top_10_students.html',
+                                      {'request': request, 'students': students, 'title': 'Top 10 students'})
+
 
 @router.get("/avg_grade", response_model=List[StudentsResponseWithAvgGrade],
             name="List of all students sorting by avg grade")
@@ -45,10 +46,11 @@ async def get_students_avg_grade(request: Request, limit: int = Query(20, le=500
     students = await  repository_students.get_students_avg_grade(limit, offset, db)
     if students is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='not found')
-    return templates.TemplateResponse('students_with_grades.html', {'request': request, 'students': students, 'title': 'Avg grades'})
+    return templates.TemplateResponse('students_with_grades.html',
+                                      {'request': request, 'students': students, 'title': 'Avg grades'})
 
 
-@router.get("/{student_id}", response_model=StudentsResponse, name="Get student by id")
+@router.get("/{student_id}", name="Get student by id")
 async def get_student(request: Request, student_id: int = Path(ge=1), db: Session = Depends(get_db)):
     student = await repository_students.get_student_by_id(student_id, db)
     if student is None:
@@ -78,5 +80,3 @@ async def delete_student(student_id: int = Path(ge=1), db: Session = Depends(get
     if student is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='not found')
     return student
-
-

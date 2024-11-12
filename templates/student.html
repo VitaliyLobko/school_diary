@@ -12,7 +12,7 @@
                         </div>
                         <div class="product-details d-flex justify-content-between">
                             <h3><a href="#">{{ student.full_name }}</a></h3>
-                            <h3><a href="#">{{ student.group.name }}</a></h3>
+                            <h3><a href="#" class='text-danger'>{{ student.avg_grade }}</a></h3>
                         </div>
                         <div class="product-center-details">
                             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium, blanditiis
@@ -23,8 +23,35 @@
                         </div>
 
                         <div class="product-bottom-details d-flex justify-content-between">
-                            <h4>{{ student.full_name }}</h4>
-                            <h3>{{ student.group.name }}</h3>
+                            <h5>{{ student.dob }}</h5>
+                            <h3>{{ student.group_name }}</h3>
+                        </div>
+                        <div class="product-details d-flex justify-content-between">
+                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                           data-bs-target="#modal-delete"><i class="fa-solid fa-trash"></i>
+                            </button>
+                            <!-- MODAL   -->
+                        <div class="modal fade" id="modal-delete" tabindex="-1" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content bg-light">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Delete this item?</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                            <button type="button" class="btn  btn-outline-dark"><i
+                                    class="fa-solid fa-pen-to-square"></i></button>
                         </div>
                     </div>
                 </div>

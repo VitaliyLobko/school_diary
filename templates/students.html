@@ -1,36 +1,47 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="full-width-block"><div>
-<section class="main-content">
-<main class=" px-3
+<div class="full-width-block">
+    <div>
+        <section class="main-content">
+            <main class=" px-3
     ">
-    <div class="container my-5">
-        <h2>{{title}}</h2>
-        <table class="table table-hover table-striped rounded-table ">
-            <thead class="table-dark">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">id</th>
-                <th scope="col">is_active</th>
-                <th scope="col">fullname</th>
-                <th scope="col">dob</th>
-                <th scope="col">group name</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for student in students %}
-            <tr onclick="window.location.href='/students/{{ student.id }}';" style="cursor: pointer;">
-                <th scope="row">{{ loop.index }}</th>
-                <td>{{ student.id }}</td>
-                <td>{{ student.is_active }}</td>
-                <td>{{ student.full_name }}</td>
-                <td>{{ student.dob }}</td>
-                <td>{{ student.group.name}}</td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    </main>
-    {% endblock %}
+                <div class="container my-5">
+                    <h2>{{title}}</h2>
+                    <table class="table table-hover table-striped rounded-table ">
+                        <thead class="table-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">id</th>
+                            <th scope="col">is_active</th>
+                            <th scope="col">fullname</th>
+                            <th scope="col">dob</th>
+                            <th scope="col">group name</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for student in students %}
+                        <tr onclick="window.location.href='/students/{{ student.id }}';" style="cursor: pointer;">
+                            <th scope="row">{{ loop.index }}</th>
+                            <td>{{ student.id }}</td>
+                            <td>{{ student.is_active }}</td>
+                            <td>{{ student.full_name }}</td>
+                            <td>{{ student.dob }}</td>
+                            <td>{{ student.group.name}}</td>
+                        </tr>
+
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <nav aria-label="Пример навигации по страницам">
+                        <ul class="pagination justify-content-end">
+                            <li class="page-item"><a class="page-link" href="#">Предыдущая</a></li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">Следующая</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </main>
+            {% endblock %}

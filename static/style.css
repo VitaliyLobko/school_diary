@@ -33,6 +33,11 @@ section {
     transform: scale(0);
 }
 
+.dropdown-item:active {
+   background-color: #FF7C22;
+ }
+
+
 /*CAROUSEL */
 .my-carousel {
     padding: 0px;
@@ -74,7 +79,6 @@ section {
 /*Product-card*/
 
 .product-card {
-
     box-shadow: 0 2px 5px 0 rgba(0,0,0,0.06);
     transition: all .3s;
     border-radius: 25px;
