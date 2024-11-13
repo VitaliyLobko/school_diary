@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="full-width-block">
+    <div>
+        <section class="main-content">
+            <main class=" px-3">
+                <div class="container my-5">
+                    <h2>{{title}}</h2>
+                    <table class="table table-hover table-striped rounded-table ">
+                        <thead class="table-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">id</th>
+                            <th scope="col">name</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for group in groups %}
+                        <tr onclick="window.location.href='/groups/{{ group.id }}';" style="cursor: pointer;">
+                            <th scope="row">{{ loop.index }}</th>
+                            <td>{{ group.id }}</td>
+                            <td>{{ group.name }}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <nav aria-label="Пример навигации по страницам">
+                        <ul class="pagination justify-content-end">
+                            <li class="page-item"><a class="page-link" href="#">Предыдущая</a></li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">Следующая</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </main>
+            {% endblock %}

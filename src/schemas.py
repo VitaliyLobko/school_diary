@@ -45,3 +45,41 @@ class StudentsResponseWithAvgGrade(BaseModel):
 
 
 
+class GroupModel(BaseModel):
+    id: int
+    name: str
+
+
+class GroupResponse(BaseModel):
+    id: int
+    name: str
+
+class DisciplineModel(BaseModel):
+    id: int
+    name: str
+    teacher_id: int
+    full_name: str
+
+
+class DisciplineResponse(BaseModel):
+    id: int
+    name: str
+    teacher_id: int
+    full_name: str
+
+
+class GradeModel(BaseModel):
+    id: int
+    grade: str
+    date_of: datetime
+    student_fullname: str
+    teacher_fullname: str
+
+
+
+class GradeResponse(BaseModel):
+    id: int
+    grade: str
+    date_of: datetime
+    student_fullname: str
+    teacher_fullname: str

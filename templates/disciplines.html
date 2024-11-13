@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="full-width-block">
+    <div>
+        <section class="main-content">
+            <main class=" px-3">
+                <div class="container my-5">
+                    <h2>{{title}}</h2>
+                    <table class="table table-hover table-striped rounded-table ">
+                        <thead class="table-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">id</th>
+                            <th scope="col">name</th>
+                              <th scope="col">teacher name</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for discipline in disciplines %}
+                        <tr onclick="window.location.href='/disciplines/{{ discipline.id }}';" style="cursor: pointer;">
+                            <th scope="row">{{ loop.index }}</th>
+                            <td>{{ discipline.id }}</td>
+                            <td>{{ discipline.name }}</td>
+                            <td>{{ discipline.full_name }}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <nav aria-label="Пример навигации по страницам">
+                        <ul class="pagination justify-content-end">
+                            <li class="page-item"><a class="page-link" href="#">Предыдущая</a></li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">Следующая</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </main>
+            {% endblock %}

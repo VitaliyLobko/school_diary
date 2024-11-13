@@ -15,7 +15,7 @@ from starlette.responses import JSONResponse, HTMLResponse
 
 from src.database.models import Teacher, Student, Discipline, Grade, Group
 from src.database.db import get_db
-from src.routes import students
+from src.routes import students, groups, disciplines, grades
 
 
 def date_range(start: date, end: date) -> list:
@@ -36,8 +36,9 @@ templates = Jinja2Templates(directory='templates')
 app.mount("/static", StaticFiles(directory=BASE_DIR / 'static'), name="static")
 
 app.include_router(students.router)
-
-
+app.include_router(groups.router)
+app.include_router(disciplines.router)
+app.include_router(grades.router)
 
 
 @app.middleware('http')
@@ -47,10 +48,6 @@ async def custom_middleware(request: Request, call_next):
     during = time.time() - start_time
     response.headers['performance'] = str(during)
     return response
-
-
-# app.include_router(teachers.router, prefix='/api')
-# app.include_router(groups.router, prefix='/api')
 
 
 @app.get("/", response_class=HTMLResponse)

@@ -1,12 +1,9 @@
-import pathlib
 from typing import List
 from fastapi import Depends, HTTPException, status, Path, APIRouter, Query, Request, FastAPI
 from fastapi.templating import Jinja2Templates
-from starlette.staticfiles import StaticFiles
 from starlette.status import HTTP_201_CREATED
 from sqlalchemy.orm import Session
 from src.database.db import get_db
-
 from src.schemas import StudentModel, StudentsResponse, StudentIsActiveModel, StudentsResponseWithAvgGrade
 from src.repository import students as repository_students
 
