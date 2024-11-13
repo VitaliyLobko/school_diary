@@ -12,6 +12,12 @@ async def create_grade(body: GradeModel, db: Session):
     return grade
 
 
+
+async def get_all(db: Session):
+    all_grades = (db.query(Grade).count())
+    return all_grades
+
+
 async def get_grades(limit, offset, db: Session):
     grades = (db.query(Grade.id,
                        Grade.grade,

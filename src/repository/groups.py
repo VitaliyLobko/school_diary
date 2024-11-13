@@ -11,6 +11,11 @@ async def create_group(body: GroupModel, db: Session):
     return group
 
 
+async def get_all(db: Session):
+    total_students = db.query(Group).count()
+    return total_students
+
+
 async def get_groups(limit, offset, db: Session):
     groups = db.query(Group).order_by(Group.name).limit(limit).offset(offset).all()
     return groups

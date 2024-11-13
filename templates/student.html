@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
+
 {% block content %}
+
 <div class="full-width-block">
     <section class="main-content">
         <div class="container my-5">
@@ -28,30 +30,73 @@
                         </div>
                         <div class="product-details d-flex justify-content-between">
                             <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
-                           data-bs-target="#modal-delete"><i class="fa-solid fa-trash"></i>
+                                    data-bs-target="#modal-delete"><i class="fa-solid fa-trash"></i>
                             </button>
                             <!-- MODAL   -->
-                        <div class="modal fade" id="modal-delete" tabindex="-1" aria-labelledby="exampleModalLabel"
-                             aria-hidden="true">
-                            <div class="modal-dialog modal-sm">
-                                <div class="modal-content bg-light">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Delete this item?</h5>
-                                    </div>
-                                    <div class="modal-body">
-                                        Are you sure?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No
-                                        </button>
-                                        <button type="button" class="btn btn-outline-danger">Delete</button>
+                            <div class="modal fade" id="modal-delete" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content bg-light">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Delete this item?</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No
+                                            </button>
+                                            <button type="button" class="btn btn-outline-danger">
+                                                Delete
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                            <button type="button" class="btn  btn-outline-dark"><i
-                                    class="fa-solid fa-pen-to-square"></i></button>
+                            <button type="button" class="btn  btn-outline-dark" data-bs-toggle="modal"
+                                    data-bs-target="#modal-edit"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <!-- MODAL   -->
+                            <div class="modal fade" id="modal-edit" tabindex="-1" aria-labelledby="exampleModalLabel1"
+                                 aria-hidden="true">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel1">Student data</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Закрыть"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form>
+                                                <div class="mb-3">
+                                                    <label for="first_name"
+                                                           class="col-form-label">First name:</label>
+                                                    <input type="text" class="form-control" id="first_name">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="last_name"
+                                                           class="col-form-label">Last name:</label>
+                                                    <input type="text" class="form-control" id="last_name">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="dob"
+                                                           class="col-form-label">dob:</label>
+                                                    <input type="text" class="form-control" id="dob">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="message-text" class="col-form-label">Сообщение:</label>
+                                                    <textarea class="form-control" id="message-text"></textarea>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">
+                                                Close
+                                            </button>
+                                            <button type="button" class="btn btn-outline-danger">Save data</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

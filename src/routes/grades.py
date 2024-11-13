@@ -20,8 +20,17 @@ async def create_grade(body: GradeModel, db: Session = Depends(get_db)):
 
 @router.get("/", response_model=List[GradeResponse], name="List of all grades", )
 async def get_grades(request: Request, limit: int = Query(20, le=500), offset: int = 0,
-                       db: Session = Depends(get_db)):
+                     db: Session = Depends(get_db)):
     grades = await repository_grade.get_grades(limit, offset, db)
+    total_count = await repository_grade.get_all(db)
     if grades is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='not found')
-    return templates.TemplateResponse('grades.html', {'request': request, 'grades': grades, 'title': 'Grades'})
+
+    return templates.TemplateResponse("grades.html", {
+        "request": request,
+        "grades": grades,
+        "limit": limit,
+        "offset": offset,
+        "total_count": total_count,
+        "title": "Grades",
+    })

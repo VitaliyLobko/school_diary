@@ -19,7 +19,7 @@
                         <tbody>
                         {% for discipline in disciplines %}
                         <tr onclick="window.location.href='/disciplines/{{ discipline.id }}';" style="cursor: pointer;">
-                            <th scope="row">{{ loop.index }}</th>
+                            <th scope="row">{{ offset + loop.index }}</th>
                             <td>{{ discipline.id }}</td>
                             <td>{{ discipline.name }}</td>
                             <td>{{ discipline.full_name }}</td>
@@ -27,13 +27,30 @@
                         {% endfor %}
                         </tbody>
                     </table>
-                    <nav aria-label="Пример навигации по страницам">
+                    <nav aria-label="Navigation">
                         <ul class="pagination justify-content-end">
-                            <li class="page-item"><a class="page-link" href="#">Предыдущая</a></li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">Следующая</a></li>
+
+                            {# Кнопка Previous #}
+                            {% if offset > 0 %}
+                            <li class="page-item">
+                                <a class="page-link" href="?limit={{ limit }}&offset={{ offset - limit }}">Previous</a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" tabindex="-1" aria-disabled="true">Previous</a>
+                            </li>
+                            {% endif %}
+
+                            {# Кнопка Next #}
+                            {% if offset + limit < total_count %}
+                            <li class="page-item">
+                                <a class="page-link" href="?limit={{ limit }}&offset={{ offset + limit }}">Next</a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" tabindex="-1" aria-disabled="true">Next</a>
+                            </li>
+                            {% endif %}
                         </ul>
                     </nav>
                 </div>

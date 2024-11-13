@@ -19,12 +19,21 @@ async def create_student(body: StudentModel, db: Session = Depends(get_db)):
 
 
 @router.get("/", response_model=List[StudentsResponse], name="List of all students", )
-async def get_students(request: Request, limit: int = Query(20, le=500), offset: int = 0,
+async def get_students(request: Request, search_by:str ='', limit: int = Query(20, le=500), offset: int = 0,
                        db: Session = Depends(get_db)):
-    students = await  repository_students.get_students(limit, offset, db)
+    students = await  repository_students.get_students(search_by, limit, offset, db)
+    total_count = await repository_students.get_all(db)
     if students is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='not found')
-    return templates.TemplateResponse('students.html', {'request': request, 'students': students, 'title': 'Students'})
+
+    return templates.TemplateResponse("students.html", {
+        "request": request,
+        "students": students,
+        "limit": limit,
+        "offset": offset,
+        "total_count": total_count,
+        "title": "Students List",
+    })
 
 
 @router.get("/top_10_students", tags=['students'])
@@ -40,11 +49,20 @@ async def top_10_students(request: Request, db: Session = Depends(get_db)):
             name="List of all students sorting by avg grade")
 async def get_students_avg_grade(request: Request, limit: int = Query(20, le=500), offset: int = 0,
                                  db: Session = Depends(get_db)):
-    students = await  repository_students.get_students_avg_grade(limit, offset, db)
+    search_by = request.get('search_by')
+    students = await  repository_students.get_students_avg_grade(limit, offset, search_by, db)
+    total_count = await  repository_students.get_all_avg_grade(db)
     if students is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='not found')
-    return templates.TemplateResponse('students_with_grades.html',
-                                      {'request': request, 'students': students, 'title': 'Avg grades'})
+
+    return templates.TemplateResponse("students_with_grades.html", {
+        "request": request,
+        "students": students,
+        "limit": limit,
+        "offset": offset,
+        "total_count": total_count,
+        "title": "Avg grades",
+    })
 
 
 @router.get("/{student_id}", name="Get student by id")
@@ -52,7 +70,7 @@ async def get_student(request: Request, student_id: int = Path(ge=1), db: Sessio
     student = await repository_students.get_student_by_id(student_id, db)
     if student is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='not found')
-    return templates.TemplateResponse('student.html', {'request': request, 'student': student, 'title': 'Students'})
+    return templates.TemplateResponse('student.html', {'request': request, 'student': student, 'title': 'Student'})
 
 
 @router.put("/{student_id}", name="Update student by id")
@@ -73,7 +91,7 @@ async def is_active_student(body: StudentIsActiveModel, student_id: int = Path(g
 
 @router.delete("/students/{student_id}", status_code=status.HTTP_204_NO_CONTENT, name="Delete student by id")
 async def delete_student(student_id: int = Path(ge=1), db: Session = Depends(get_db)):
-    student = repository_students.delete_student(student_id, db)
+    student = await repository_students.delete_student(student_id, db)
     if student is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='not found')
     return student
