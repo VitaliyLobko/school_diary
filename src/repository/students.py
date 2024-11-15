@@ -19,50 +19,117 @@ async def get_all(db: Session):
 
 async def get_students(search_by, limit, offset, db: Session):
     if search_by:
-
-        students = db.query(Student).order_by(Student.full_name).filter(Student.full_name.ilike(f'%{search_by}%')).limit(limit).offset(offset).all()
+        students = (
+            db.query(Student)
+            .order_by(Student.full_name)
+            .filter(Student.full_name.ilike(f"%{search_by}%"))
+            .limit(limit)
+            .offset(offset)
+            .all()
+        )
     else:
-        students = db.query(Student).order_by(Student.full_name).limit(limit).offset(offset).all()
+        students = (
+            db.query(Student)
+            .order_by(Student.full_name)
+            .limit(limit)
+            .offset(offset)
+            .all()
+        )
     return students
 
 
 async def get_top_10_students(db: Session):
-    students = db.query(Student.id, Student.full_name, Student.dob,
-                        func.round(func.avg(Grade.grade), 2).label('avg_grade'),
-                        Group.name.label('group_name'), Student.created_at, Student.updated_at, Student.is_active) \
-        .select_from(Student).join(Group).join(Grade).group_by(
-        Student.id, Group.id).order_by(desc(func.avg(Grade.grade)), Student.full_name).limit(10).all()
+    students = (
+        db.query(
+            Student.id,
+            Student.full_name,
+            Student.dob,
+            func.round(func.avg(Grade.grade), 2).label("avg_grade"),
+            Group.name.label("group_name"),
+            Student.created_at,
+            Student.updated_at,
+            Student.is_active,
+        )
+        .select_from(Student)
+        .join(Group)
+        .join(Grade)
+        .group_by(Student.id, Group.id)
+        .order_by(desc(func.avg(Grade.grade)), Student.full_name)
+        .limit(10)
+        .all()
+    )
     return students
 
 
 async def get_all_avg_grade(db: Session):
-    total_avg_grade = db.query(Student.id, Student.full_name, Student.dob,
-                               func.round(func.avg(Grade.grade), 2).label('avg_grade'),
-                               Group.id.label('group_id'), Group.name.label('group_name'), Student.created_at,
-                               Student.updated_at, Student.is_active) \
-        .select_from(Grade).join(Student).join(Group).group_by(
-        Student.id, Group.id).order_by(desc(func.avg(Grade.grade)), Student.full_name).count()
+    total_avg_grade = (
+        db.query(
+            Student.id,
+            Student.full_name,
+            Student.dob,
+            func.round(func.avg(Grade.grade), 2).label("avg_grade"),
+            Group.id.label("group_id"),
+            Group.name.label("group_name"),
+            Student.created_at,
+            Student.updated_at,
+            Student.is_active,
+        )
+        .select_from(Grade)
+        .join(Student)
+        .join(Group)
+        .group_by(Student.id, Group.id)
+        .order_by(desc(func.avg(Grade.grade)), Student.full_name)
+        .count()
+    )
     return total_avg_grade
 
 
 async def get_students_avg_grade(limit, offset, db: Session):
-    students = db.query(Student.id, Student.full_name, Student.dob,
-                        func.round(func.avg(Grade.grade), 2).label('avg_grade'),
-                        Group.id.label('group_id'), Group.name.label('group_name'), Student.created_at,
-                        Student.updated_at, Student.is_active) \
-        .select_from(Grade).join(Student).join(Group).group_by(
-        Student.id, Group.id).order_by(desc(func.avg(Grade.grade)), Student.full_name).limit(limit).offset(offset).all()
+    students = (
+        db.query(
+            Student.id,
+            Student.full_name,
+            Student.dob,
+            func.round(func.avg(Grade.grade), 2).label("avg_grade"),
+            Group.id.label("group_id"),
+            Group.name.label("group_name"),
+            Student.created_at,
+            Student.updated_at,
+            Student.is_active,
+        )
+        .select_from(Grade)
+        .join(Student)
+        .join(Group)
+        .group_by(Student.id, Group.id)
+        .order_by(desc(func.avg(Grade.grade)), Student.full_name)
+        .limit(limit)
+        .offset(offset)
+        .all()
+    )
     return students
 
 
 async def get_student_by_id(student_id: int, db: Session):
-    student = db.query(Student.id, Student.full_name, Student.dob,
-                       func.round(func.avg(Grade.grade), 2).label('avg_grade'),
-                       Group.id.label('group_id'), Group.name.label('group_name'), Student.created_at,
-                       Student.updated_at, Student.is_active) \
-        .select_from(Grade).join(Student).join(Group).group_by(
-        Student.id, Group.id).order_by(desc(func.avg(Grade.grade)), Student.full_name).where(
-        Student.id == student_id).first()
+    student = (
+        db.query(
+            Student.id,
+            Student.full_name,
+            Student.dob,
+            func.round(func.avg(Grade.grade), 2).label("avg_grade"),
+            Group.id.label("group_id"),
+            Group.name.label("group_name"),
+            Student.created_at,
+            Student.updated_at,
+            Student.is_active,
+        )
+        .select_from(Grade)
+        .join(Student)
+        .join(Group)
+        .group_by(Student.id, Group.id)
+        .order_by(desc(func.avg(Grade.grade)), Student.full_name)
+        .where(Student.id == student_id)
+        .first()
+    )
 
     return student
 

@@ -25,8 +25,8 @@
                         </div>
 
                         <div class="product-bottom-details d-flex justify-content-between">
-                            <h5>{{ student.dob }}</h5>
-                            <h3>{{ student.group_name }}</h3>
+                            <h4>{{ student.dob }}</h4>
+                            <h4>{{ student.group_name }}</h4>
                         </div>
                         <div class="product-details d-flex justify-content-between">
                             <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
@@ -66,7 +66,11 @@
                                                     aria-label="Закрыть"></button>
                                         </div>
                                         <div class="modal-body">
+
                                             <form>
+                                                <div class="product-thumb-edit">
+                                                    <a href=""><img src="../static/no_foto.jpg" alt=""></a>
+                                                </div>
                                                 <div class="mb-3">
                                                     <label for="first_name"
                                                            class="col-form-label">First name:</label>
@@ -81,10 +85,6 @@
                                                     <label for="dob"
                                                            class="col-form-label">dob:</label>
                                                     <input type="text" class="form-control" id="dob">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="message-text" class="col-form-label">Сообщение:</label>
-                                                    <textarea class="form-control" id="message-text"></textarea>
                                                 </div>
                                             </form>
                                         </div>

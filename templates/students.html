@@ -8,13 +8,17 @@
                 <div class="container my-5">
                     <h2>{{title}}</h2>
                     <form class="w-50 mt-5" action="/students/?search=search_by" method="GET">
-                    <div class="row">
+                        <div class="row">
                             <div class="col">
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" id="basic-addon1">Search by:</span>
                                     <input type="text" class="form-control" placeholder="Student name"
                                            aria-label="student name" aria-describedby="basic-addon1" name="search_by">
+                                    {% if request.query_params.get('search_by') %}
+                                    <button type="submit" class="btn btn-secondary">Clear</button>
+                                    {% else %}
                                     <button type="submit" class="btn btn-secondary">Search</button>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -23,7 +27,6 @@
                         <thead class="table-dark">
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">id</th>
                             <th scope="col">fullname</th>
                             <th scope="col">dob</th>
                             <th scope="col">group name</th>
@@ -33,7 +36,6 @@
                         {% for student in students %}
                         <tr onclick="window.location.href='/students/{{ student.id }}';" style="cursor: pointer;">
                             <th scope="row">{{ offset + loop.index }}</th>
-                            <td>{{ student.id }}</td>
                             <td>{{ student.full_name }}</td>
                             <td>{{ student.dob }}</td>
                             <td>{{ student.group.name}}</td>

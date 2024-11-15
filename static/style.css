@@ -103,6 +103,12 @@ section {
    border-radius: 25px;
 }
 
+.product-thumb-edit img {
+   max-width: 100%;
+   max-height:100%;
+   border-radius: 15px;
+}
+
 .product-details {
   padding:20px;
 }

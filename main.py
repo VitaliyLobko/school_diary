@@ -32,8 +32,8 @@ app = FastAPI()
 
 BASE_DIR = pathlib.Path(__file__).parent
 
-templates = Jinja2Templates(directory='templates')
-app.mount("/static", StaticFiles(directory=BASE_DIR / 'static'), name="static")
+templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 
 app.include_router(students.router)
 app.include_router(groups.router)
@@ -41,18 +41,20 @@ app.include_router(disciplines.router)
 app.include_router(grades.router)
 
 
-@app.middleware('http')
+@app.middleware("http")
 async def custom_middleware(request: Request, call_next):
     start_time = time.time()
     response = await call_next(request)
     during = time.time() - start_time
-    response.headers['performance'] = str(during)
+    response.headers["performance"] = str(during)
     return response
 
 
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
-    return templates.TemplateResponse('index.html', {"request": request, "title": "Home App"})
+    return templates.TemplateResponse(
+        "index.html", {"request": request, "title": "Home App"}
+    )
 
 
 @app.get("/healthchecker")
@@ -60,14 +62,14 @@ async def healthchecker(db: Session = Depends(get_db)):
     try:
         result = db.execute(text("Select 1")).fetchone()
         if result is None:
-            raise HTTPException(status_code=500, detail='DB is not worked')
+            raise HTTPException(status_code=500, detail="DB is not worked")
         return {"message": "Welcome to FastAPI"}
     except Exception as e:
         print(e)
-        raise HTTPException(status_code=500, detail='Error connecting to db')
+        raise HTTPException(status_code=500, detail="Error connecting to db")
 
 
-@app.get("/seed", tags=['seed'])
+@app.get("/seed", tags=["seed"])
 async def seed(db: Session = Depends(get_db)):
     disciplines = [
         "Вища математика",
@@ -88,8 +90,11 @@ async def seed(db: Session = Depends(get_db)):
 
     def seed_teachers():
         for _ in range(number_of_teachers):
-            teacher = Teacher(first_name=fake.first_name(), last_name=fake.last_name(),
-                              dob=fake.date_of_birth(None, 18, 60))
+            teacher = Teacher(
+                first_name=fake.first_name(),
+                last_name=fake.last_name(),
+                dob=fake.date_of_birth(None, 18, 60),
+            )
             db.add(teacher)
         db.commit()
 
@@ -107,8 +112,12 @@ async def seed(db: Session = Depends(get_db)):
     def seed_students():
         group_ids = db.scalars(select(Group.id)).all()
         for _ in range(number_of_students):
-            student = Student(first_name=fake.first_name(), last_name=fake.last_name(), group_id=choice(group_ids),
-                              dob=fake.date_of_birth(None, 18, 60))
+            student = Student(
+                first_name=fake.first_name(),
+                last_name=fake.last_name(),
+                group_id=choice(group_ids),
+                dob=fake.date_of_birth(None, 18, 60),
+            )
             db.add(student)
         db.commit()
 

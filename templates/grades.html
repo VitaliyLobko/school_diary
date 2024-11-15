@@ -7,6 +7,40 @@
             <main class=" px-3">
                 <div class="container my-5">
                     <h2>{{title}}</h2>
+                    <form class="w-100 mt-5" action="/grades/?search=search_by" method="GET">
+                        <div class="row">
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">Search by:</span>
+                                    <input type="text" class="form-control" placeholder="Student name"
+                                           aria-label="student name" aria-describedby="basic-addon1" name="search_by">
+                                    {% if request.query_params.get('search_by') %}
+                                    <button type="submit" class="btn btn-secondary">Clear</button>
+                                    {% else %}
+                                    <button type="submit" class="btn btn-secondary">Search</button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col">
+                                <select class="form-select" aria-label="Select by discipline" name="discipline"
+                                        onchange="this.form.submit()">
+                                    <option selected>Select by discipline:</option>
+                                    {% for discipline in disciplines %}
+                                    <option value="{{ discipline.id }}" {% if request.query_params.get(
+                                    'discipline') == discipline.id %}selected{% endif %}>{{ discipline.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col">
+                                <select class="form-select" aria-label="Select by teacher">
+                                    <option selected>Select by teacher:</option>
+                                    <option value="1">Один</option>
+                                    <option value="2">Два</option>
+                                    <option value="3">Три</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
                     <table class="table table-hover table-striped rounded-table ">
                         <thead class="table-dark">
                         <tr>

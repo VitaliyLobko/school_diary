@@ -11,16 +11,14 @@
                         <thead class="table-dark">
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">id</th>
                             <th scope="col">name</th>
-                              <th scope="col">teacher name</th>
+                            <th scope="col">teacher name</th>
                         </tr>
                         </thead>
                         <tbody>
                         {% for discipline in disciplines %}
                         <tr onclick="window.location.href='/disciplines/{{ discipline.id }}';" style="cursor: pointer;">
                             <th scope="row">{{ offset + loop.index }}</th>
-                            <td>{{ discipline.id }}</td>
                             <td>{{ discipline.name }}</td>
                             <td>{{ discipline.full_name }}</td>
                         </tr>

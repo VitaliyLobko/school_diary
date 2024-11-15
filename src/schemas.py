@@ -1,16 +1,17 @@
 from datetime import datetime
+from typing import Annotated
 
+from annotated_types import MinLen, MaxLen
 from pydantic import BaseModel, Field, EmailStr
-
 
 
 class StudentModel(BaseModel):
     is_active: bool = True
-    full_name: str  = Field('NoName', min_length=3, max_length=250)
+    first_name: Annotated[str, MinLen(3), MaxLen(250)]
+    last_name: Annotated[str, MinLen(3), MaxLen(250)]
     dob: datetime
     group_id: int
-    created_at: datetime
-    updated_at: datetime
+
 
 class StudentIsActiveModel(BaseModel):
     is_active: bool = True
@@ -43,8 +44,6 @@ class StudentsResponseWithAvgGrade(BaseModel):
         from_attributes = True
 
 
-
-
 class GroupModel(BaseModel):
     id: int
     name: str
@@ -53,6 +52,7 @@ class GroupModel(BaseModel):
 class GroupResponse(BaseModel):
     id: int
     name: str
+
 
 class DisciplineModel(BaseModel):
     id: int
@@ -74,7 +74,6 @@ class GradeModel(BaseModel):
     date_of: datetime
     student_fullname: str
     teacher_fullname: str
-
 
 
 class GradeResponse(BaseModel):
