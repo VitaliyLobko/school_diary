@@ -12,7 +12,6 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from starlette.responses import JSONResponse, HTMLResponse
-
 from src.database.models import Teacher, Student, Discipline, Grade, Group
 from src.database.db import get_db
 from src.routes import students, groups, disciplines, grades
@@ -63,10 +62,9 @@ async def healthchecker(db: Session = Depends(get_db)):
         result = db.execute(text("Select 1")).fetchone()
         if result is None:
             raise HTTPException(status_code=500, detail="DB is not worked")
-        return {"message": "Welcome to FastAPI"}
+        return {"message": "Welcome to Students diary FastAPI"}
     except Exception as e:
-        print(e)
-        raise HTTPException(status_code=500, detail="Error connecting to db")
+        raise HTTPException(status_code=500, detail=f"Error connecting to db - {e}")
 
 
 @app.get("/seed", tags=["seed"])

@@ -1,3 +1,5 @@
+from typing import List
+
 from sqlalchemy import func, desc
 from sqlalchemy.orm import Session
 from src.database.models import Student, Grade, Group
@@ -17,7 +19,7 @@ async def get_all(db: Session):
     return total_students
 
 
-async def get_students(search_by, limit, offset, db: Session):
+async def get_students(search_by, limit, offset, db: Session) -> List[Student]:
     if search_by:
         students = (
             db.query(Student)
@@ -38,17 +40,18 @@ async def get_students(search_by, limit, offset, db: Session):
     return students
 
 
-async def get_top_10_students(db: Session):
+async def get_top_10_students(db: Session) -> List[Student]:
     students = (
         db.query(
             Student.id,
             Student.full_name,
             Student.dob,
-            func.round(func.avg(Grade.grade), 2).label("avg_grade"),
-            Group.name.label("group_name"),
             Student.created_at,
             Student.updated_at,
             Student.is_active,
+            func.round(func.avg(Grade.grade), 2).label("avg_grade"),
+            Group.id.label("group_id"),
+            Group.name.label("group_name"),
         )
         .select_from(Student)
         .join(Group)
@@ -61,7 +64,7 @@ async def get_top_10_students(db: Session):
     return students
 
 
-async def get_all_avg_grade(db: Session):
+async def get_all_avg_grade(db: Session) -> List[Student]:
     total_avg_grade = (
         db.query(
             Student.id,
@@ -84,7 +87,7 @@ async def get_all_avg_grade(db: Session):
     return total_avg_grade
 
 
-async def get_students_avg_grade(limit, offset, db: Session):
+async def get_students_avg_grade(limit, offset, db: Session) -> List[Student]:
     students = (
         db.query(
             Student.id,
@@ -109,7 +112,7 @@ async def get_students_avg_grade(limit, offset, db: Session):
     return students
 
 
-async def get_student_by_id(student_id: int, db: Session):
+async def get_student_by_id(student_id: int, db: Session) -> Student | None:
     student = (
         db.query(
             Student.id,
@@ -134,22 +137,20 @@ async def get_student_by_id(student_id: int, db: Session):
     return student
 
 
-async def update_student(body: StudentModel, student_id: int, db: Session):
-    student = db.query(Student).filter_by(id=student_id).first()
-    student.full_name = body.full_name
+async def update_student(body: StudentModel, student: int, db: Session):
+    for name, value in body:
+        setattr(student, name, value)
     db.commit()
     return student
 
 
-async def is_active_student(body: StudentIsActiveModel, student_id: int, db: Session):
-    student = db.query(Student).filter_by(id=student_id).first()
+async def is_active_student(body: StudentIsActiveModel, student, db: Session):
     student.is_active = body.is_active
     db.commit()
     return student
 
 
-async def delete_student(student_id: int, db: Session):
-    student = db.query(Student).filter_by(id=student_id).first()
+async def delete_student(student, db: Session):
     db.delete(student)
     db.commit()
     return student

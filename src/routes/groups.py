@@ -3,11 +3,9 @@ from fastapi import (
     Depends,
     HTTPException,
     status,
-    Path,
     APIRouter,
     Query,
     Request,
-    FastAPI,
 )
 from fastapi.templating import Jinja2Templates
 from starlette.status import HTTP_201_CREATED
@@ -15,6 +13,7 @@ from sqlalchemy.orm import Session
 from src.database.db import get_db
 from src.repository import groups as repository_group
 from src.schemas import GroupModel, GroupResponse
+from src.repository.dependencies import get_student_by_id
 
 router = APIRouter(prefix="/groups", tags=["groups"])
 
