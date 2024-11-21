@@ -37,12 +37,10 @@
                             <li><a class="dropdown-item " href="/students">All students list</a></li>
                             <li><a class="dropdown-item" href="/students/avg_grade">Students by rating</a></li>
                             <li><a class="dropdown-item" href="/students/top_10_students">Top 10 students</a></li>
-
-
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/docs">Teachers</a>
+                        <a class="nav-link active" aria-current="page" href="/teachers">Teachers</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/grades">Grades</a>
@@ -79,8 +77,8 @@
                                 </div>
                             </div>
                         </div>
-
                     </li>
+
                 </ul>
 
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -91,12 +89,77 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#"></a></li>
-                            <li><a class="dropdown-item" href="#">Registration</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
+                            <li class="nav-item">
+                                <a class="dropdown-item" aria-current="page" href="/registration"
+                                   data-bs-toggle="modal"
+                                   data-bs-target="#modal-registration">Registration</a>
+
                             </li>
-                            <li><a class="dropdown-item" href="#">Sign in</a></li>
+
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                   data-bs-target="#modal-signin">Sign in</a></li>
                         </ul>
+                        <!-- MODAL REGISTRATION   -->
+                        <div class="modal fade" id="modal-registration" tabindex="-3"
+                             aria-labelledby="ModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content bg-light">
+                                    <div class="modal-body">
+                                        <form>
+                                            <div class="mb-3">
+                                                <label for="registrationInputEmail" class="form-label">Email
+                                                    address</label>
+                                                <input type="email" class="form-control bg-light"
+                                                       id="registrationInputEmail"
+                                                       aria-describedby="emailHelp">
+
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="exampleInputPassword1"
+                                                       class="form-label">Password</label>
+                                                <input type="password" class="form-control bg-light"
+                                                       id="registrationInputPassword">
+                                            </div>
+                                            <div class="mb-3 form-check">
+                                                <input class="form-check-input " type="checkbox" value=""
+                                                       id="flexCheckDefault">
+                                                <label class="form-check-label" for="flexCheckDefault">I Agree</label>
+                                            </div>
+                                            <button type="submit" class="btn btn-outline-danger">Register</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- MODAL SIGN IN   -->
+                        <div class="modal fade" id="modal-signin" tabindex="-3"
+                             aria-labelledby="ModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content bg-light">
+                                    <div class="modal-body">
+                                        <form>
+                                            <div class="mb-3">
+                                                <label for="exampleInputEmail1" class="form-label">Email
+                                                    address</label>
+                                                <input type="email" class="form-control bg-light"
+                                                       id="exampleInputEmail1"
+                                                       aria-describedby="emailHelp">
+
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="exampleInputPassword1"
+                                                       class="form-label">Password</label>
+                                                <input type="password" class="form-control bg-light"
+                                                       id="exampleInputPassword1">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Sign in</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </li>
                 </ul>
             </div>

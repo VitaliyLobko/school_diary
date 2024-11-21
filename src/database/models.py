@@ -8,7 +8,9 @@ from sqlalchemy import (
     func,
     DateTime,
     event,
+    Enum,
 )
+from sqlalchemy.dialects.postgresql import ENUM
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship, declarative_base
 
@@ -22,20 +24,17 @@ class Teacher(Base):
     first_name = Column(String(120), default="None")
     last_name = Column(String(120), default="None")
     dob = Column(Date, nullable=True)
+    # contacts = relationship(
+    #     "Contact",
+    #     primaryjoin="and_(foreign(Contact.person_id)==Teacher.id, Contact.person_type=='teacher')",
+    #     backref="teacher",
+    # )
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
     @hybrid_property
     def full_name(self):
         return self.first_name + " " + self.last_name
-
-
-class Group(Base):
-    __tablename__ = "groups"
-    id = Column(Integer, primary_key=True)
-    name = Column(String(20), nullable=False)
-    created_at = Column(DateTime, default=func.now())
-    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
 
 class Student(Base):
@@ -47,12 +46,37 @@ class Student(Base):
     dob = Column(Date, nullable=True)
     group_id = Column("group_id", ForeignKey("groups.id", ondelete="CASCADE"))
     group = relationship("Group", backref="students")
+    # contacts = relationship(
+    #     "Contact",
+    #     primaryjoin="and_(foreign(Contact.person_id)==Student.id, Contact.person_type=='student')",
+    #     # Используем foreign()
+    #     backref="student",
+    # )
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
     @hybrid_property
     def full_name(self):
         return self.first_name + " " + self.last_name
+
+
+class Contact(Base):
+    __tablename__ = "contacts"
+    id = Column(Integer, primary_key=True)
+    contact_type = Column(String(50), nullable=False)
+    contact_value = Column(String(255), nullable=False)
+    person_id = Column(Integer, nullable=False)
+    person_type = Column(String(50))
+    created_at = Column(DateTime, default=func.now())
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
+
+
+class Group(Base):
+    __tablename__ = "groups"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(20), nullable=False)
+    created_at = Column(DateTime, default=func.now())
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
 
 class Discipline(Base):
@@ -80,14 +104,8 @@ class Grade(Base):
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
 
-#
-# @event.listens_for(Teacher, 'before_update')
-# def update_is_active(mapper, conn, target):
-#     if target.teacher_id == 1:
-#         target.is_active = False
-#
-#
-# @event.listens_for(Teacher, 'before_insert')
-# def update_is_active(mapper, conn, target):
-#     if target.teacher_id == 1:
-#         target.is_active = False
+class User(Base):
+    __tablename__ = "User"
+    id = Column(Integer, primary_key=True)
+    username = Column(String(250), nullable=False)
+    password = Column(String(250), nullable=True)

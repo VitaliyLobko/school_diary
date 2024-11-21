@@ -3,11 +3,9 @@ from fastapi import (
     Depends,
     HTTPException,
     status,
-    Path,
     APIRouter,
     Query,
     Request,
-    FastAPI,
 )
 from fastapi.templating import Jinja2Templates
 from starlette.status import HTTP_201_CREATED
