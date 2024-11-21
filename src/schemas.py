@@ -87,3 +87,8 @@ class GradeModel(BaseModel):
 
 class GradeResponse(GradeModel):
     pass
+
+
+class UserModel(BaseModel):
+    username: str
+    password: str

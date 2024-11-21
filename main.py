@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 from starlette.responses import JSONResponse, HTMLResponse
 from src.database.db import get_db
-from src.routes import students, teachers, groups, disciplines, grades, seed
+from src.routes import students, teachers, groups, disciplines, grades, seed, users
 
 app = FastAPI()
 
@@ -25,6 +25,7 @@ app.include_router(groups.router)
 app.include_router(disciplines.router)
 app.include_router(grades.router)
 app.include_router(seed.router)
+app.include_router(users.router)
 
 
 @app.middleware("http")
@@ -55,4 +56,4 @@ async def root(request: Request):
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="127.0.0.1", port=8001)
+    uvicorn.run("main:app", host="127.0.0.1", port=8007)

@@ -93,9 +93,7 @@
                                 <a class="dropdown-item" aria-current="page" href="/registration"
                                    data-bs-toggle="modal"
                                    data-bs-target="#modal-registration">Registration</a>
-
                             </li>
-
                             <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
                                    data-bs-target="#modal-signin">Sign in</a></li>
                         </ul>
@@ -106,20 +104,19 @@
                             <div class="modal-dialog modal-sm">
                                 <div class="modal-content bg-light">
                                     <div class="modal-body">
-                                        <form>
+                                        <form action="/signup/" method="post">
                                             <div class="mb-3">
-                                                <label for="registrationInputEmail" class="form-label">Email
+                                                <label for="username" class="form-label">Email
                                                     address</label>
-                                                <input type="email" class="form-control bg-light"
-                                                       id="registrationInputEmail"
-                                                       aria-describedby="emailHelp">
-
+                                                <input type="email" name="username" class="form-control bg-light"
+                                                       id="username"
+                                                       aria-describedby="username">
                                             </div>
                                             <div class="mb-3">
-                                                <label for="exampleInputPassword1"
+                                                <label for="password"
                                                        class="form-label">Password</label>
-                                                <input type="password" class="form-control bg-light"
-                                                       id="registrationInputPassword">
+                                                <input type="password" name="password" class="form-control bg-light"
+                                                       id="password">
                                             </div>
                                             <div class="mb-3 form-check">
                                                 <input class="form-check-input " type="checkbox" value=""
@@ -139,7 +136,7 @@
                             <div class="modal-dialog modal-sm">
                                 <div class="modal-content bg-light">
                                     <div class="modal-body">
-                                        <form>
+                                        <form  action="/login" method="post">
                                             <div class="mb-3">
                                                 <label for="exampleInputEmail1" class="form-label">Email
                                                     address</label>

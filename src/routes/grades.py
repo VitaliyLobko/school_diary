@@ -12,10 +12,14 @@ from fastapi import (
 from fastapi.templating import Jinja2Templates
 from starlette.status import HTTP_201_CREATED
 from sqlalchemy.orm import Session
+
+from src.auth import get_current_user
 from src.database.db import get_db
+from src.database.models import User
 from src.schemas import GradeModel, GradeResponse
 from src.repository import grades as repository_grade
 from src.repository import disciplines as repository_disciplines
+
 
 router = APIRouter(prefix="/grades", tags=["grades"])
 
@@ -40,6 +44,7 @@ async def get_grades(
     limit: int = Query(20, le=500),
     offset: int = 0,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     grades = await repository_grade.get_grades(search_by, discipline, limit, offset, db)
     disciplines = await repository_disciplines.get_disciplines(limit, offset, db)

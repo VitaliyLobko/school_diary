@@ -105,7 +105,7 @@ class Grade(Base):
 
 
 class User(Base):
-    __tablename__ = "User"
+    __tablename__ = "users"
     id = Column(Integer, primary_key=True)
-    username = Column(String(250), nullable=False)
-    password = Column(String(250), nullable=True)
+    email = Column(String(150), nullable=False, unique=True)
+    password = Column(String(255), nullable=False)
