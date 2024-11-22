@@ -92,12 +92,10 @@
                             <li class="nav-item">
                                 <a class="dropdown-item" aria-current="page" href="/registration"
                                    data-bs-toggle="modal"
-                                   data-bs-target="#modal-registration">Registration</a>
-
+                                   data-bs-target="#modal-registration">Sign in</a>
                             </li>
-
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                   data-bs-target="#modal-signin">Sign in</a></li>
+                            <li><a class="dropdown-item" href="/login" data-bs-toggle="modal"
+                                   data-bs-target="#modal-signin">Log in</a></li>
                         </ul>
                         <!-- MODAL REGISTRATION   -->
                         <div class="modal fade" id="modal-registration" tabindex="-3"
@@ -106,27 +104,23 @@
                             <div class="modal-dialog modal-sm">
                                 <div class="modal-content bg-light">
                                     <div class="modal-body">
-                                        <form>
+                                        <form action="/signup" method="post" enctype=multipart/form-data>
                                             <div class="mb-3">
-                                                <label for="registrationInputEmail" class="form-label">Email
+                                                <label for="username" class="form-label">Email
                                                     address</label>
-                                                <input type="email" class="form-control bg-light"
-                                                       id="registrationInputEmail"
-                                                       aria-describedby="emailHelp">
-
+                                                <input type="email" name="username" class="form-control bg-light"
+                                                       id="username"
+                                                       aria-describedby="username">
                                             </div>
                                             <div class="mb-3">
-                                                <label for="exampleInputPassword1"
+                                                <label for="password"
                                                        class="form-label">Password</label>
-                                                <input type="password" class="form-control bg-light"
-                                                       id="registrationInputPassword">
+                                                <input type="password" name="password" class="form-control bg-light"
+                                                       id="password">
                                             </div>
                                             <div class="mb-3 form-check">
-                                                <input class="form-check-input " type="checkbox" value=""
-                                                       id="flexCheckDefault">
-                                                <label class="form-check-label" for="flexCheckDefault">I Agree</label>
                                             </div>
-                                            <button type="submit" class="btn btn-outline-danger">Register</button>
+                                            <button type="submit" class="btn btn-outline-danger">Sign in</button>
                                         </form>
                                     </div>
                                 </div>
@@ -139,11 +133,11 @@
                             <div class="modal-dialog modal-sm">
                                 <div class="modal-content bg-light">
                                     <div class="modal-body">
-                                        <form>
+                                        <form  action="/login" method="post">
                                             <div class="mb-3">
                                                 <label for="exampleInputEmail1" class="form-label">Email
                                                     address</label>
-                                                <input type="email" class="form-control bg-light"
+                                                <input type="email" name="username" class="form-control"
                                                        id="exampleInputEmail1"
                                                        aria-describedby="emailHelp">
 
@@ -151,10 +145,10 @@
                                             <div class="mb-3">
                                                 <label for="exampleInputPassword1"
                                                        class="form-label">Password</label>
-                                                <input type="password" class="form-control bg-light"
+                                                <input type="password" name="password"  class="form-control"
                                                        id="exampleInputPassword1">
                                             </div>
-                                            <button type="submit" class="btn btn-primary">Sign in</button>
+                                            <button type="submit" class="btn btn-primary">Log in</button>
                                         </form>
                                     </div>
                                 </div>

@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from src.database.models import Discipline, Teacher
-from src.schemas import DisciplineModel
+from src.schemas.disciplines import DisciplineModel
 
 
 async def create_discipline(body: DisciplineModel, db: Session):

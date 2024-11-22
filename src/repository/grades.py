@@ -1,7 +1,7 @@
 from sqlalchemy import desc
 from sqlalchemy.orm import Session
 from src.database.models import Group, Grade, Student, Teacher, Discipline
-from src.schemas import GradeModel
+from src.schemas.grades import GradeModel
 
 
 async def create_grade(body: GradeModel, db: Session):

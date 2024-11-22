@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from src.database.models import Group
-from src.schemas import GroupModel
+from src.schemas.groups import GroupModel
 
 
 async def create_group(body: GroupModel, db: Session):

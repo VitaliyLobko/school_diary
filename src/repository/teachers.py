@@ -2,11 +2,13 @@ from typing import List
 from sqlalchemy import func, desc
 from sqlalchemy.orm import Session
 from src.database.models import Student, Grade, Group, Teacher
-from src.schemas import (
-    StudentModel,
-    StudentIsActiveModel,
+from src.schemas.teachers import (
     TeacherModel,
     TeachersIsActiveModel,
+)
+from src.schemas.students import (
+    StudentModel,
+    StudentIsActiveModel,
 )
 
 

@@ -3,7 +3,7 @@ from typing import List
 from sqlalchemy import func, desc
 from sqlalchemy.orm import Session
 from src.database.models import Student, Grade, Group
-from src.schemas import StudentModel, StudentIsActiveModel
+from src.schemas.students import StudentModel, StudentIsActiveModel
 
 
 async def create_student(body: StudentModel, db: Session):
