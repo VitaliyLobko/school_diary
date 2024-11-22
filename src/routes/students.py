@@ -5,7 +5,7 @@ from starlette.status import HTTP_201_CREATED
 from sqlalchemy.orm import Session
 from src.database.db import get_db
 from src.database.models import Student
-from src.schemas import (
+from src.schemas.students import (
     StudentModel,
     StudentsResponse,
     StudentIsActiveModel,
@@ -15,7 +15,6 @@ from src.repository import students as repository_students
 from src.repository.dependencies import get_student_by_id
 
 router = APIRouter(prefix="/students", tags=["students"])
-
 templates = Jinja2Templates(directory="templates")
 
 

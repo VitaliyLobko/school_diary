@@ -1,8 +1,9 @@
+import configparser
+import pathlib
 from datetime import datetime, timedelta
 from typing import Optional
 from fastapi import Depends, HTTPException, status
-
-from fastapi.security import OAuth2PasswordBearer  # Bearer token
+from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from jose import JWTError, jwt
@@ -11,8 +12,13 @@ from src.repository import users as repository_user
 from src.database.models import User
 
 
-SECRET_KEY = "secret_key"
-ALGORITHM = "HS256"
+config = configparser.ConfigParser()
+file_config = pathlib.Path(__file__).parent.joinpath("conf/config.ini")
+config.read(file_config)
+
+SECRET_KEY = config.get("AUTH", "SECRET_KEY")
+ALGORITHM = config.get("AUTH", "ALGORITHM")
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
 
@@ -56,8 +62,7 @@ async def get_current_user(
             raise credentials_exception
     except JWTError as e:
         raise credentials_exception
-
-    user: User | None = await repository_user.get_user_by_email(db, email)
+    user: User | None = await repository_user.get_user_by_email(email, db)
     if user is None:
         raise credentials_exception
     return user

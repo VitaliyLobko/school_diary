@@ -5,7 +5,7 @@ from starlette.status import HTTP_201_CREATED
 from sqlalchemy.orm import Session
 from src.database.db import get_db
 from src.database.models import Student, Teacher
-from src.schemas import (
+from src.schemas.teachers import (
     TeacherModel,
     TeachersResponse,
     TeachersIsActiveModel,

@@ -1,3 +1,4 @@
+import enum
 from sqlalchemy import (
     Column,
     Integer,
@@ -15,6 +16,12 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship, declarative_base
 
 Base = declarative_base()
+
+
+class Role(enum.Enum):
+    admin: str = "admin"
+    moderator: str = "moderator"
+    user: str = "user"
 
 
 class Teacher(Base):
@@ -107,5 +114,10 @@ class Grade(Base):
 class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
+    avatar = Column(String(255), nullable=True)
+    username = Column(String(50), nullable=True)
     email = Column(String(150), nullable=False, unique=True)
     password = Column(String(255), nullable=False)
+    created_at = Column(DateTime, default=func.now())
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
+    roles = Column("roles", Enum(Role), default=Role.user)

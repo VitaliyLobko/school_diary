@@ -3,21 +3,23 @@ from fastapi import (
     HTTPException,
     status,
     APIRouter,
+    Request,
 )
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from src.auth import create_access_token, hash_handler
 from src.database.db import get_db
-from src.schemas import UserModel
 from src.repository import users as repository_user
+from fastapi.templating import Jinja2Templates
+from src.schemas.users import UserModel
 
-router = APIRouter(tags=["users"])
+router = APIRouter(tags=["auth"])
+templates = Jinja2Templates(directory="templates")
 
 
 @router.post("/signup")
-async def signup(body, db: Session = Depends(get_db)):
+async def signup(body: UserModel, db: Session = Depends(get_db)):
     exist_user = await repository_user.get_user_by_email(body.username, db)
-    print(body.username)
     if exist_user:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, detail="Account already exists"
@@ -29,7 +31,9 @@ async def signup(body, db: Session = Depends(get_db)):
 
 @router.post("/login")
 async def login(
-    body: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
+    request: Request,
+    body: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_db),
 ):
     user = await repository_user.get_user_by_email(body.username, db)
     if user is None:
@@ -40,5 +44,14 @@ async def login(
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid password"
         )
-    access_token = await create_access_token(data={"sub": user.username})
+    access_token = await create_access_token(data={"sub": user.email})
     return {"access_token": access_token, "token_type": "bearer"}
+    # return templates.TemplateResponse(
+    #     "index.html",
+    #     {
+    #         "request": request,
+    #         "title": "Home App",
+    #         "access_token": access_token,
+    #         "token_type": "bearer",
+    #     },
+    # )

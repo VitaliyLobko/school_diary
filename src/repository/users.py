@@ -1,12 +1,18 @@
-from typing import List
-
 from sqlalchemy.orm import Session
 from src.database.models import User
-from src.schemas import StudentModel, StudentIsActiveModel, UserModel
+from src.schemas.users import UserModel
+from libgravatar import Gravatar
 
 
 async def create_user(body: UserModel, password, db: Session):
-    new_user = User(email=body.email, password=password)
+    g = Gravatar(body.username)
+
+    new_user = User(
+        username=body.username,
+        email=body.username,
+        password=password,
+        avatar=g.get_image(),
+    )
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
@@ -14,11 +20,5 @@ async def create_user(body: UserModel, password, db: Session):
 
 
 async def get_user_by_email(email, db: Session) -> User | None:
-    user = db.query(User).filter(User.email == email).first()
+    user: User | None = db.query(User).filter_by(email=email).first()
     return user
-
-
-async def delete_student(student, db: Session):
-    db.delete(student)
-    db.commit()
-    return student

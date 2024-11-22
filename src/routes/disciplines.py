@@ -12,7 +12,7 @@ from starlette.status import HTTP_201_CREATED
 from sqlalchemy.orm import Session
 from src.database.db import get_db
 from src.repository import disciplines as repository_disciplines
-from src.schemas import DisciplineModel, DisciplineResponse
+from src.schemas.disciplines import DisciplineModel, DisciplineResponse
 
 router = APIRouter(prefix="/disciplines", tags=["disciplines"])
 

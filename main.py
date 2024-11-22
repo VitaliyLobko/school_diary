@@ -1,7 +1,5 @@
 import pathlib
 import time
-from _pydatetime import date
-from datetime import timedelta
 import uvicorn
 from fastapi import FastAPI, Depends, HTTPException, Request
 from fastapi.templating import Jinja2Templates
@@ -10,7 +8,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 from starlette.responses import JSONResponse, HTMLResponse
 from src.database.db import get_db
-from src.routes import students, teachers, groups, disciplines, grades, seed, users
+from src.routes import students, teachers, groups, disciplines, grades, seed, auth
 
 app = FastAPI()
 
@@ -25,7 +23,7 @@ app.include_router(groups.router)
 app.include_router(disciplines.router)
 app.include_router(grades.router)
 app.include_router(seed.router)
-app.include_router(users.router)
+app.include_router(auth.router)
 
 
 @app.middleware("http")
