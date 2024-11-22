@@ -12,8 +12,8 @@ from src.schemas.students import (
 )
 
 
-async def create_teacher(body: StudentModel, db: Session):
-    student = Student(**body.model_dump())
+async def create_teacher(body: TeacherModel, db: Session):
+    student = Teacher(**body.model_dump())
     db.add(student)
     db.commit()
     db.refresh(student)

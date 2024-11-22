@@ -11,8 +11,10 @@ from fastapi.templating import Jinja2Templates
 from starlette.status import HTTP_201_CREATED
 from sqlalchemy.orm import Session
 from src.database.db import get_db
+from src.database.models import Discipline
 from src.repository import disciplines as repository_disciplines
 from src.schemas.disciplines import DisciplineModel, DisciplineResponse
+from src.repository.dependencies import get_discipline_by_id
 
 router = APIRouter(prefix="/disciplines", tags=["disciplines"])
 
@@ -20,9 +22,9 @@ templates = Jinja2Templates(directory="templates")
 
 
 @router.post("/", status_code=HTTP_201_CREATED, name="Create discipline")
-async def create_disciplines(body: DisciplineModel, db: Session = Depends(get_db)):
-    group = await repository_disciplines.create_discipline(body, db)
-    return group
+async def create_discipline(body: DisciplineModel, db: Session = Depends(get_db)):
+    discipline = await repository_disciplines.create_discipline(body, db)
+    return discipline
 
 
 @router.get(
@@ -53,3 +55,36 @@ async def get_disciplines(
             "title": "Disciplines List",
         },
     )
+
+
+@router.put("/{discipline_id}", name="Update discipline by id")
+async def update_discipline(
+    body: DisciplineModel,
+    discipline: Discipline = Depends(get_discipline_by_id),
+    db: Session = Depends(get_db),
+):
+    discipline = await repository_disciplines.update_discipline(body, discipline, db)
+    if discipline is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Student with id: {discipline} not found",
+        )
+    return discipline
+
+
+@router.delete(
+    "/{discipline_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    name="Delete discipline by id",
+)
+async def delete_discipline(
+    discipline: Discipline = Depends(get_discipline_by_id),
+    db: Session = Depends(get_db),
+) -> None:
+
+    discipline = await repository_disciplines.delete_discipline(discipline, db)
+    if discipline is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Discipline not found",
+        )

@@ -23,6 +23,7 @@ def date_range(start: date, end: date) -> list:
 
 @router.get("/", tags=["seed"])
 async def seed(db: Session = Depends(get_db)):
+    # TODO:  if data exist no seed
     disciplines = [
         "Algebra",
         "Biology",
