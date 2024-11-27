@@ -6,11 +6,31 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 from sqlalchemy import text
+from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse, HTMLResponse
 from src.database.db import get_db
 from src.routes import students, teachers, groups, disciplines, grades, seed, auth
 
 app = FastAPI()
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.middleware("http")
+async def custom_middleware(request: Request, call_next):
+    start_time = time.time()
+    response = await call_next(request)
+    during = time.time() - start_time
+    response.headers["performance"] = str(during)
+    return response
+
 
 BASE_DIR = pathlib.Path(__file__).parent
 
@@ -24,15 +44,6 @@ app.include_router(disciplines.router)
 app.include_router(grades.router)
 app.include_router(seed.router)
 app.include_router(auth.router)
-
-
-@app.middleware("http")
-async def custom_middleware(request: Request, call_next):
-    start_time = time.time()
-    response = await call_next(request)
-    during = time.time() - start_time
-    response.headers["performance"] = str(during)
-    return response
 
 
 @app.get("/healthchecker")
@@ -54,4 +65,4 @@ async def root(request: Request):
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="127.0.0.1", port=8007)
+    uvicorn.run("main:app", host="127.0.0.1", port=8000)

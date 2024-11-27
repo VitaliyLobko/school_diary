@@ -5,9 +5,8 @@ from pydantic import BaseModel
 
 
 class GroupModel(BaseModel):
-    id: int
     name: str
 
 
 class GroupResponse(GroupModel):
-    pass
+    id: int

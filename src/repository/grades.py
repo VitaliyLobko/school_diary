@@ -17,6 +17,7 @@ async def get_all(db: Session):
     return all_grades
 
 
+# FIXME: need fix search criteria
 async def get_grades(search_by, discipline, limit, offset, db: Session):
     if search_by:
         grades = (

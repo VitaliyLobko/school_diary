@@ -3,6 +3,8 @@ from fastapi import Depends, HTTPException, status, Path, APIRouter, Query, Requ
 from fastapi.templating import Jinja2Templates
 from starlette.status import HTTP_201_CREATED
 from sqlalchemy.orm import Session
+from src.database.models import Role
+from src.services.roles import RoleAccess
 from src.database.db import get_db
 from src.database.models import Student
 from src.schemas.students import (
@@ -17,12 +19,18 @@ from src.repository.dependencies import get_student_by_id
 router = APIRouter(prefix="/students", tags=["students"])
 templates = Jinja2Templates(directory="templates")
 
+allowed_operation_get = RoleAccess([Role.admin, Role.moderator, Role.user])
+allowed_operation_create = RoleAccess([Role.admin, Role.moderator])
+allowed_operation_update = RoleAccess([Role.admin, Role.moderator])
+allowed_operation_remove = RoleAccess([Role.admin])
+
 
 @router.post(
     "/",
     status_code=HTTP_201_CREATED,
     response_model=StudentsResponse,
     name="Create student",
+    dependencies=[Depends(allowed_operation_create)],
 )
 async def create_student(body: StudentModel, db: Session = Depends(get_db)):
     student = await repository_students.create_student(body, db)
@@ -38,6 +46,7 @@ async def create_student(body: StudentModel, db: Session = Depends(get_db)):
     "/",
     response_model=List[StudentsResponse],
     name="List of all students",
+    dependencies=[Depends(allowed_operation_get)],
 )
 async def get_students(
     request: Request,
@@ -70,6 +79,7 @@ async def get_students(
     "/top_10_students",
     response_model=List[StudentsResponseWithAvgGrade],
     tags=["students"],
+    dependencies=[Depends(allowed_operation_get)],
 )
 async def top_10_students(request: Request, db: Session = Depends(get_db)):
     students = await repository_students.get_top_10_students(db)
@@ -87,6 +97,7 @@ async def top_10_students(request: Request, db: Session = Depends(get_db)):
     "/avg_grade",
     response_model=List[StudentsResponseWithAvgGrade],
     name="List of all students sorting by avg grade",
+    dependencies=[Depends(allowed_operation_get)],
 )
 async def get_students_avg_grade(
     request: Request,
@@ -114,7 +125,11 @@ async def get_students_avg_grade(
     )
 
 
-@router.get("/{student_id}", name="Get student by id")
+@router.get(
+    "/{student_id}",
+    name="Get student by id",
+    dependencies=[Depends(allowed_operation_get)],
+)
 async def get_student(
     request: Request,
     student_id: Annotated[int, Path(ge=1, lt=10_000)],
@@ -131,7 +146,11 @@ async def get_student(
     )
 
 
-@router.put("/{student_id}", name="Update student by id")
+@router.put(
+    "/{student_id}",
+    name="Update student by id",
+    dependencies=[Depends(allowed_operation_update)],
+)
 async def update_student(
     body: StudentModel,
     student: Student = Depends(get_student_by_id),
@@ -146,7 +165,11 @@ async def update_student(
     return student
 
 
-@router.patch("/{student_id}/is_active", name="Set status is_active by student id")
+@router.patch(
+    "/{student_id}/is_active",
+    name="Set status is_active by student id",
+    dependencies=[Depends(allowed_operation_update)],
+)
 async def is_active_student(
     body: StudentIsActiveModel,
     student: Student = Depends(get_student_by_id),
@@ -165,6 +188,7 @@ async def is_active_student(
     "/{student_id}",
     status_code=status.HTTP_204_NO_CONTENT,
     name="Delete student by id",
+    dependencies=[Depends(allowed_operation_remove)],
 )
 async def delete_student(
     student: Student = Depends(get_student_by_id), db: Session = Depends(get_db)
@@ -174,5 +198,5 @@ async def delete_student(
     if student is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Student not found",
+            detail=f"Student {student} not found",
         )

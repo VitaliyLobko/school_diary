@@ -26,3 +26,16 @@ async def get_disciplines(limit, offset, db: Session):
         .all()
     )
     return disciplines
+
+
+async def update_discipline(body: DisciplineModel, discipine: int, db: Session):
+    for name, value in body:
+        setattr(discipine, name, value)
+    db.commit()
+    return discipine
+
+
+async def delete_discipline(discipline, db: Session):
+    db.delete(discipline)
+    db.commit()
+    return discipline

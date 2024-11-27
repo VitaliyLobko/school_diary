@@ -5,10 +5,21 @@ from faker import Faker
 from fastapi import Depends, APIRouter
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from src.database.models import Teacher, Student, Discipline, Grade, Group, Contact
+from src.database.models import (
+    Teacher,
+    Student,
+    Discipline,
+    Grade,
+    Group,
+    Contact,
+    Role,
+)
 from src.database.db import get_db
+from src.services.roles import RoleAccess
 
 router = APIRouter(prefix="/seed", tags=["seed"])
+
+allowed_operation_create = RoleAccess([Role.admin])
 
 
 def date_range(start: date, end: date) -> list:
@@ -21,8 +32,13 @@ def date_range(start: date, end: date) -> list:
     return result
 
 
-@router.get("/", tags=["seed"])
+@router.get(
+    "/",
+    tags=["seed"],
+    dependencies=[Depends(allowed_operation_create)],
+)
 async def seed(db: Session = Depends(get_db)):
+    # TODO:  if data exist no seed
     disciplines = [
         "Algebra",
         "Biology",

@@ -1,10 +1,11 @@
-from typing import List, Annotated
-from fastapi import Depends, HTTPException, status, Path, APIRouter, Query, Request
+from typing import List
+from fastapi import Depends, HTTPException, status, APIRouter, Query, Request
 from fastapi.templating import Jinja2Templates
 from starlette.status import HTTP_201_CREATED
 from sqlalchemy.orm import Session
 from src.database.db import get_db
-from src.database.models import Student, Teacher
+from src.database.models import Student, Teacher, Role
+from src.services.roles import RoleAccess
 from src.schemas.teachers import (
     TeacherModel,
     TeachersResponse,
@@ -14,8 +15,12 @@ from src.repository import teachers as repository_teachers
 from src.repository.dependencies import get_teacher_by_id
 
 router = APIRouter(prefix="/teachers", tags=["teachers"])
-
 templates = Jinja2Templates(directory="templates")
+
+allowed_operation_get = RoleAccess([Role.admin, Role.moderator, Role.user])
+allowed_operation_create = RoleAccess([Role.admin, Role.moderator])
+allowed_operation_update = RoleAccess([Role.admin, Role.moderator])
+allowed_operation_remove = RoleAccess([Role.admin])
 
 
 @router.post(
@@ -23,6 +28,7 @@ templates = Jinja2Templates(directory="templates")
     status_code=HTTP_201_CREATED,
     response_model=TeachersResponse,
     name="Create teacher",
+    dependencies=[Depends(allowed_operation_create)],
 )
 async def create_teacher(body: TeacherModel, db: Session = Depends(get_db)):
     teacher = await repository_teachers.create_teacher(body, db)
@@ -38,6 +44,7 @@ async def create_teacher(body: TeacherModel, db: Session = Depends(get_db)):
     "/",
     response_model=List[TeachersResponse],
     name="List of all teachers",
+    dependencies=[Depends(allowed_operation_get)],
 )
 async def get_teachers(
     request: Request,
@@ -65,7 +72,11 @@ async def get_teachers(
     )
 
 
-@router.get("/{teacher_id}", name="Get teacher by id")
+@router.get(
+    "/{teacher_id}",
+    name="Get teacher by id",
+    dependencies=[Depends(allowed_operation_get)],
+)
 async def get_teacher(
     request: Request,
     teacher: Teacher = Depends(get_teacher_by_id),
@@ -81,7 +92,11 @@ async def get_teacher(
     )
 
 
-@router.put("/{teacher_id}", name="Update teacher by id")
+@router.put(
+    "/{teacher_id}",
+    name="Update teacher by id",
+    dependencies=[Depends(allowed_operation_update)],
+)
 async def update_teacher(
     body: TeacherModel,
     teacher: Teacher = Depends(get_teacher_by_id),
@@ -100,6 +115,7 @@ async def update_teacher(
     "/{teacher_id}/is_active",
     response_model=TeachersResponse,
     name="Set status is_active by teacher id",
+    dependencies=[Depends(allowed_operation_update)],
 )
 async def is_active_teacher(
     body: TeachersIsActiveModel,
@@ -119,6 +135,7 @@ async def is_active_teacher(
     "/{teacher_id}",
     status_code=status.HTTP_204_NO_CONTENT,
     name="Delete student by id",
+    dependencies=[Depends(allowed_operation_remove)],
 )
 async def delete_student(
     teacher: Student = Depends(get_teacher_by_id), db: Session = Depends(get_db)

@@ -19,6 +19,7 @@ async def get_all(db: Session):
     return total_students
 
 
+# FIXME: need fix search criteria
 async def get_students(search_by, limit, offset, db: Session) -> List[Student]:
     if search_by:
         students = (

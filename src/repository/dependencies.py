@@ -1,10 +1,8 @@
 from typing import Annotated
-
 from fastapi import Path, Depends
 from sqlalchemy.orm import Session
-
 from src.database.db import get_db
-from src.database.models import Student, Group, Teacher
+from src.database.models import Student, Group, Teacher, Discipline
 
 
 async def get_student_by_id(
@@ -26,3 +24,10 @@ async def get_group_by_id(
 ):
     group = db.query(Group).filter_by(id=group_id).first()
     return group
+
+
+async def get_discipline_by_id(
+    discipline_id: Annotated[int, Path(ge=1, lt=10_000)], db: Session = Depends(get_db)
+):
+    discipline = db.query(Discipline).filter_by(id=discipline_id).first()
+    return discipline

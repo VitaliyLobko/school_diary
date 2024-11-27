@@ -19,3 +19,16 @@ async def get_all(db: Session):
 async def get_groups(limit, offset, db: Session):
     groups = db.query(Group).order_by(Group.name).limit(limit).offset(offset).all()
     return groups
+
+
+async def update_group(body: GroupModel, group: int, db: Session):
+    for name, value in body:
+        setattr(group, name, value)
+    db.commit()
+    return group
+
+
+async def delete_group(group, db: Session):
+    db.delete(group)
+    db.commit()
+    return group

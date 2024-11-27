@@ -1,0 +1,16 @@
+version: '4.36'
+services:
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: sdiary
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Ogax544b
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data

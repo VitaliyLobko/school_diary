@@ -12,15 +12,27 @@ from starlette.status import HTTP_201_CREATED
 from sqlalchemy.orm import Session
 from src.database.db import get_db
 from src.repository import groups as repository_group
+from src.repository.dependencies import get_group_by_id
+from src.database.models import Group, Role
+from src.services.roles import RoleAccess
 from src.schemas.groups import GroupModel, GroupResponse
 
 
 router = APIRouter(prefix="/groups", tags=["groups"])
-
 templates = Jinja2Templates(directory="templates")
 
+allowed_operation_get = RoleAccess([Role.admin, Role.moderator, Role.user])
+allowed_operation_create = RoleAccess([Role.admin, Role.moderator])
+allowed_operation_update = RoleAccess([Role.admin, Role.moderator])
+allowed_operation_remove = RoleAccess([Role.admin])
 
-@router.post("/", status_code=HTTP_201_CREATED, name="Create group")
+
+@router.post(
+    "/",
+    status_code=HTTP_201_CREATED,
+    name="Create group",
+    dependencies=[Depends(allowed_operation_create)],
+)
 async def create_group(body: GroupModel, db: Session = Depends(get_db)):
     group = await repository_group.create_group(body, db)
     return group
@@ -30,6 +42,7 @@ async def create_group(body: GroupModel, db: Session = Depends(get_db)):
     "/",
     response_model=List[GroupResponse],
     name="List of all groups",
+    dependencies=[Depends(allowed_operation_get)],
 )
 async def get_groups(
     request: Request,
@@ -54,3 +67,41 @@ async def get_groups(
             "title": "Groups",
         },
     )
+
+
+@router.put(
+    "/{group_id}",
+    name="Update group by id",
+    dependencies=[Depends(allowed_operation_update)],
+)
+async def update_group(
+    body: GroupModel,
+    group: Group = Depends(get_group_by_id),
+    db: Session = Depends(get_db),
+):
+    group = await repository_group.update_group(body, group, db)
+    if group is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Group with id: {group} not found",
+        )
+    return group
+
+
+@router.delete(
+    "/{group_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    name="Delete group by id",
+    dependencies=[Depends(allowed_operation_remove)],
+)
+async def delete_group(
+    group: Group = Depends(get_group_by_id),
+    db: Session = Depends(get_db),
+) -> None:
+
+    group = await repository_group.delete_group(group, db)
+    if group is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Group not found",
+        )

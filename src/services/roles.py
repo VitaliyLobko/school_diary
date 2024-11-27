@@ -1,9 +1,7 @@
 from typing import List
-
 from fastapi import Depends, HTTPException, status, Request
-
 from src.database.models import User, Role
-from src.auth import get_current_user
+from src.services.auth import get_current_user
 
 
 class RoleAccess:

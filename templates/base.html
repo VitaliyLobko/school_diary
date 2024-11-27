@@ -14,7 +14,7 @@
 </head>
 <body>
 <script src="../static/bootstrap.bundle.min.js"></script>
-<script src="../static/data.js"></script>
+<script src="../static/main.js"></script>
 <script src="https://kit.fontawesome.com/f9f41889e8.js" crossorigin="anonymous"></script>
 <header>
     <nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
@@ -97,56 +97,48 @@
                             <li><a class="dropdown-item" href="/login" data-bs-toggle="modal"
                                    data-bs-target="#modal-signin">Log in</a></li>
                         </ul>
-                        <!-- MODAL REGISTRATION   -->
-                        <div class="modal fade" id="modal-registration" tabindex="-3"
-                             aria-labelledby="ModalLabel"
-                             aria-hidden="true">
-                            <div class="modal-dialog modal-sm">
-                                <div class="modal-content bg-light">
-                                    <div class="modal-body">
-                                        <form action="/signup" method="post" enctype=multipart/form-data>
-                                            <div class="mb-3">
-                                                <label for="username" class="form-label">Email
-                                                    address</label>
-                                                <input type="email" name="username" class="form-control bg-light"
-                                                       id="username"
-                                                       aria-describedby="username">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="password"
-                                                       class="form-label">Password</label>
-                                                <input type="password" name="password" class="form-control bg-light"
-                                                       id="password">
-                                            </div>
-                                            <div class="mb-3 form-check">
-                                            </div>
-                                            <button type="submit" class="btn btn-outline-danger">Sign in</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- MODAL SIGN IN   -->
+                                                <!-- MODAL REGISTRATION   -->
+                                                <div class="modal fade" id="modal-registration" tabindex="-3"
+                                                     aria-labelledby="ModalLabel"
+                                                     aria-hidden="true">
+                                                    <div class="modal-dialog modal-sm">
+                                                        <div class="modal-content bg-light">
+                                                            <div class="modal-body">
+                                                                <form action="/signup" method="post" enctype=multipart/form-data>
+                                                                    <div class="mb-3">
+                                                                        <input type="email" name="username" class="form-control bg-light"
+                                                                               id="username"
+                                                                               aria-describedby="username" placeholder="name@example.com">
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <input type="password" name="password" class="form-control bg-light"
+                                                                               id="password" placeholder="password">
+                                                                    </div>
+                                                                    <div class="mb-3 form-check">
+                                                                    </div>
+                                                                    <button class="btn btn-outline-secondary">Cancel</button>
+                                                                    <button type="submit" class="btn btn-outline-danger">Sign in</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                         MODAL login in
                         <div class="modal fade" id="modal-signin" tabindex="-3"
                              aria-labelledby="ModalLabel"
                              aria-hidden="true">
                             <div class="modal-dialog modal-sm">
                                 <div class="modal-content bg-light">
                                     <div class="modal-body">
-                                        <form  action="/login" method="post">
+                                        <form action="/login" method="post">
                                             <div class="mb-3">
-                                                <label for="exampleInputEmail1" class="form-label">Email
-                                                    address</label>
                                                 <input type="email" name="username" class="form-control"
                                                        id="exampleInputEmail1"
-                                                       aria-describedby="emailHelp">
-
+                                                       aria-describedby="emailHelp" placeholder="name@example.com">
                                             </div>
                                             <div class="mb-3">
-                                                <label for="exampleInputPassword1"
-                                                       class="form-label">Password</label>
-                                                <input type="password" name="password"  class="form-control"
-                                                       id="exampleInputPassword1">
+                                                <input type="password" name="password" class="form-control"
+                                                       id="exampleInputPassword1" placeholder="password">
                                             </div>
                                             <button type="submit" class="btn btn-primary">Log in</button>
                                         </form>
