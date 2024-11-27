@@ -24,6 +24,11 @@ class Role(enum.Enum):
     user: str = "user"
 
 
+class PersonType(enum.Enum):
+    teacher: str = "teacher"
+    student: str = "student"
+
+
 class Teacher(Base):
     __tablename__ = "teachers"
     id = Column(Integer, primary_key=True)
@@ -74,6 +79,7 @@ class Contact(Base):
     contact_value = Column(String(255), nullable=False)
     person_id = Column(Integer, nullable=False)
     person_type = Column(String(50))
+    PersonType = Column("person_types", Enum(PersonType), default=PersonType.student)
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
@@ -117,6 +123,7 @@ class User(Base):
     avatar = Column(String(255), nullable=True)
     username = Column(String(50), nullable=True)
     email = Column(String(150), nullable=False, unique=True)
+    confirmed = Column(Boolean, default=False)
     password = Column(String(255), nullable=False)
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())

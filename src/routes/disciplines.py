@@ -11,17 +11,27 @@ from fastapi.templating import Jinja2Templates
 from starlette.status import HTTP_201_CREATED
 from sqlalchemy.orm import Session
 from src.database.db import get_db
-from src.database.models import Discipline
+from src.database.models import Discipline, Role
 from src.repository import disciplines as repository_disciplines
+from src.services.roles import RoleAccess
 from src.schemas.disciplines import DisciplineModel, DisciplineResponse
 from src.repository.dependencies import get_discipline_by_id
 
 router = APIRouter(prefix="/disciplines", tags=["disciplines"])
-
 templates = Jinja2Templates(directory="templates")
 
+allowed_operation_get = RoleAccess([Role.admin, Role.moderator, Role.user])
+allowed_operation_create = RoleAccess([Role.admin, Role.moderator])
+allowed_operation_update = RoleAccess([Role.admin, Role.moderator])
+allowed_operation_remove = RoleAccess([Role.admin])
 
-@router.post("/", status_code=HTTP_201_CREATED, name="Create discipline")
+
+@router.post(
+    "/",
+    status_code=HTTP_201_CREATED,
+    name="Create discipline",
+    dependencies=[Depends(allowed_operation_create)],
+)
 async def create_discipline(body: DisciplineModel, db: Session = Depends(get_db)):
     discipline = await repository_disciplines.create_discipline(body, db)
     return discipline
@@ -31,6 +41,7 @@ async def create_discipline(body: DisciplineModel, db: Session = Depends(get_db)
     "/",
     response_model=List[DisciplineResponse],
     name="List of all disciplines",
+    dependencies=[Depends(allowed_operation_get)],
 )
 async def get_disciplines(
     request: Request,
@@ -57,7 +68,11 @@ async def get_disciplines(
     )
 
 
-@router.put("/{discipline_id}", name="Update discipline by id")
+@router.put(
+    "/{discipline_id}",
+    name="Update discipline by id",
+    dependencies=[Depends(allowed_operation_update)],
+)
 async def update_discipline(
     body: DisciplineModel,
     discipline: Discipline = Depends(get_discipline_by_id),
@@ -76,6 +91,7 @@ async def update_discipline(
     "/{discipline_id}",
     status_code=status.HTTP_204_NO_CONTENT,
     name="Delete discipline by id",
+    dependencies=[Depends(allowed_operation_remove)],
 )
 async def delete_discipline(
     discipline: Discipline = Depends(get_discipline_by_id),
