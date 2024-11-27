@@ -7,7 +7,7 @@ from src.services.auth import create_email_token
 
 conf = ConnectionConfig(
     MAIL_USERNAME="school_diary@meta.ua",
-    MAIL_PASSWORD="Oadt43a123",
+    MAIL_PASSWORD="123",
     MAIL_FROM="school_diary@meta.ua",
     MAIL_PORT=465,
     MAIL_SERVER="smtp.meta.ua",
