@@ -60,7 +60,7 @@ async def healthchecker(db: Session = Depends(get_db)):
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
     return templates.TemplateResponse(
-        "index.html", {"request": request, "title": "Home App"}
+        request, "index.html", {"request": request, "title": "Home App"}
     )
 
 

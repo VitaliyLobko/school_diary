@@ -1,4 +1,7 @@
+import pickle
 from typing import List, Annotated
+
+import redis
 from fastapi import Depends, HTTPException, status, Path, APIRouter, Query, Request
 from fastapi.templating import Jinja2Templates
 from starlette.status import HTTP_201_CREATED
@@ -18,6 +21,8 @@ from src.repository.dependencies import get_student_by_id
 
 router = APIRouter(prefix="/students", tags=["students"])
 templates = Jinja2Templates(directory="templates")
+
+r = redis.Redis(host="localhost", port=6379, db=0)
 
 allowed_operation_get = RoleAccess([Role.admin, Role.moderator, Role.user])
 allowed_operation_create = RoleAccess([Role.admin, Role.moderator])
@@ -46,7 +51,6 @@ async def create_student(body: StudentModel, db: Session = Depends(get_db)):
     "/",
     response_model=List[StudentsResponse],
     name="List of all students",
-    dependencies=[Depends(allowed_operation_get)],
 )
 async def get_students(
     request: Request,
@@ -79,7 +83,6 @@ async def get_students(
     "/top_10_students",
     response_model=List[StudentsResponseWithAvgGrade],
     tags=["students"],
-    dependencies=[Depends(allowed_operation_get)],
 )
 async def top_10_students(request: Request, db: Session = Depends(get_db)):
     students = await repository_students.get_top_10_students(db)
@@ -97,7 +100,6 @@ async def top_10_students(request: Request, db: Session = Depends(get_db)):
     "/avg_grade",
     response_model=List[StudentsResponseWithAvgGrade],
     name="List of all students sorting by avg grade",
-    dependencies=[Depends(allowed_operation_get)],
 )
 async def get_students_avg_grade(
     request: Request,
@@ -128,21 +130,36 @@ async def get_students_avg_grade(
 @router.get(
     "/{student_id}",
     name="Get student by id",
-    dependencies=[Depends(allowed_operation_get)],
 )
 async def get_student(
     request: Request,
     student_id: Annotated[int, Path(ge=1, lt=10_000)],
     db: Session = Depends(get_db),
 ):
-    student = await repository_students.get_student_by_id(student_id, db)
+    student = r.get(f"student:{student_id}")
+    if student is None:
+        student = await repository_students.get_student_by_id(student_id, db)
+        r.set(f"student:{student_id}", pickle.dumps(student))
+        r.expire(f"student:{student_id}", 60)
+    else:
+        student = pickle.loads(student)
+
     if student is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Student with id: {student_id} not found",
         )
+
+    contacts = await repository_students.get_student_contacts(student_id, db)
+
     return templates.TemplateResponse(
-        "student.html", {"request": request, "student": student, "title": "Student"}
+        "student.html",
+        {
+            "request": request,
+            "student": student,
+            "contacts": contacts,
+            "title": "Student",
+        },
     )
 
 

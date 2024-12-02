@@ -42,7 +42,6 @@ async def create_group(body: GroupModel, db: Session = Depends(get_db)):
     "/",
     response_model=List[GroupResponse],
     name="List of all groups",
-    dependencies=[Depends(allowed_operation_get)],
 )
 async def get_groups(
     request: Request,

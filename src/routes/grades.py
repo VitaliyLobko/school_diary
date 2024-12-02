@@ -1,4 +1,6 @@
 from typing import List
+
+import redis
 from fastapi import (
     Depends,
     HTTPException,
@@ -20,6 +22,7 @@ from src.repository import disciplines as repository_disciplines
 
 router = APIRouter(prefix="/grades", tags=["grades"])
 templates = Jinja2Templates(directory="templates")
+
 
 allowed_operation_get = RoleAccess([Role.admin, Role.moderator, Role.user])
 allowed_operation_create = RoleAccess([Role.admin, Role.moderator, Role.user])
@@ -45,7 +48,6 @@ async def create_grade(
     "/",
     response_model=List[GradeResponse],
     name="List of all grades",
-    dependencies=[Depends(allowed_operation_get)],
 )
 async def get_grades(
     request: Request,

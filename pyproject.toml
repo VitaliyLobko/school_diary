@@ -24,7 +24,14 @@ libgravatar = "^1.0.4"
 fastapi-mail = "^1.4.2"
 email-validator = "^2.2.0"
 redis = "^5.2.0"
+httpx = "^0.28.0"
 
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
 
 [build-system]
 requires = ["poetry-core"]

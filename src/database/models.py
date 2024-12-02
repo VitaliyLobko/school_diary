@@ -36,11 +36,6 @@ class Teacher(Base):
     first_name = Column(String(120), default="None")
     last_name = Column(String(120), default="None")
     dob = Column(Date, nullable=True)
-    # contacts = relationship(
-    #     "Contact",
-    #     primaryjoin="and_(foreign(Contact.person_id)==Teacher.id, Contact.person_type=='teacher')",
-    #     backref="teacher",
-    # )
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
@@ -58,12 +53,6 @@ class Student(Base):
     dob = Column(Date, nullable=True)
     group_id = Column("group_id", ForeignKey("groups.id", ondelete="CASCADE"))
     group = relationship("Group", backref="students")
-    # contacts = relationship(
-    #     "Contact",
-    #     primaryjoin="and_(foreign(Contact.person_id)==Student.id, Contact.person_type=='student')",
-    #     # Используем foreign()
-    #     backref="student",
-    # )
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
@@ -78,8 +67,7 @@ class Contact(Base):
     contact_type = Column(String(50), nullable=False)
     contact_value = Column(String(255), nullable=False)
     person_id = Column(Integer, nullable=False)
-    person_type = Column(String(50))
-    PersonType = Column("person_types", Enum(PersonType), default=PersonType.student)
+    person_types = Column("person_types", Enum(PersonType), default=PersonType.student)
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 

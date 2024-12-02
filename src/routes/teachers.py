@@ -44,7 +44,6 @@ async def create_teacher(body: TeacherModel, db: Session = Depends(get_db)):
     "/",
     response_model=List[TeachersResponse],
     name="List of all teachers",
-    dependencies=[Depends(allowed_operation_get)],
 )
 async def get_teachers(
     request: Request,
@@ -75,7 +74,6 @@ async def get_teachers(
 @router.get(
     "/{teacher_id}",
     name="Get teacher by id",
-    dependencies=[Depends(allowed_operation_get)],
 )
 async def get_teacher(
     request: Request,
