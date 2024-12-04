@@ -1,7 +1,6 @@
 # School diary app (FastAPI)
 
-<img src="https://img.shields.io/badge/Python-black?style=for-the-badge&logo=python&logoColor=white">
-<img src="https://img.shields.io/badge/FastAPI-black?style=for-the-badge&logo=fastapi&logoColor=white">
+<img src="https://img.shields.io/badge/Python-black?style=for-the-badge&logo=python&logoColor=white"><img src="https://img.shields.io/badge/FastAPI-black?style=for-the-badge&logo=fastapi&logoColor=white">
 <img src="https://img.shields.io/badge/Postgresql-black?style=for-the-badge&logo=postgresql&logoColor=white">
 <img src="https://img.shields.io/badge/SqlAlchemy-black?style=for-the-badge&logo=SqlAlchemy&logoColor=white">
 <img src="https://img.shields.io/badge/Alembic-black?style=for-the-badge&logo=alembic&logoColor=white">
