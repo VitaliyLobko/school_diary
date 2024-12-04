@@ -1,14 +1,6 @@
 # School diary app (FastAPI)
 
-<img src="https://img.shields.io/badge/Python-black?style=for-the-badge&logo=python&logoColor=white"><img src="https://img.shields.io/badge/FastAPI-black?style=for-the-badge&logo=fastapi&logoColor=white">
-<img src="https://img.shields.io/badge/Postgresql-black?style=for-the-badge&logo=postgresql&logoColor=white">
-<img src="https://img.shields.io/badge/SqlAlchemy-black?style=for-the-badge&logo=SqlAlchemy&logoColor=white">
-<img src="https://img.shields.io/badge/Alembic-black?style=for-the-badge&logo=alembic&logoColor=white">
-<img src="https://img.shields.io/badge/Redis-black?style=for-the-badge&logo=redis&logoColor=white">
-<img src="https://img.shields.io/badge/jinja-black?style=for-the-badge&logo=jinja&logoColor=white">
-<img src="https://img.shields.io/badge/html5-black?style=for-the-badge&logo=html5&logoColor=white">
-<img src="https://img.shields.io/badge/CSS3-black?style=for-the-badge&logo=CSS3&logoColor=white">
-<img src="https://img.shields.io/badge/bootstrap-black?style=for-the-badge&logo=bootstrap&logoColor=white">
+<img src="https://img.shields.io/badge/Python-black?style=for-the-badge&logo=python&logoColor=white"><img src="https://img.shields.io/badge/FastAPI-black?style=for-the-badge&logo=fastapi&logoColor=white"><img src="https://img.shields.io/badge/Postgresql-black?style=for-the-badge&logo=postgresql&logoColor=white"><img src="https://img.shields.io/badge/SqlAlchemy-black?style=for-the-badge&logo=SqlAlchemy&logoColor=white"><img src="https://img.shields.io/badge/Alembic-black?style=for-the-badge&logo=alembic&logoColor=white"><img src="https://img.shields.io/badge/Redis-black?style=for-the-badge&logo=redis&logoColor=white"><img src="https://img.shields.io/badge/jinja-black?style=for-the-badge&logo=jinja&logoColor=white"><img src="https://img.shields.io/badge/html5-black?style=for-the-badge&logo=html5&logoColor=white"><img src="https://img.shields.io/badge/CSS3-black?style=for-the-badge&logo=CSS3&logoColor=white"><img src="https://img.shields.io/badge/bootstrap-black?style=for-the-badge&logo=bootstrap&logoColor=white">
 
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/VitaliyLobko/school_diary/issues)
 [![GitHub release](https://img.shields.io/github/release/VitaliyLobko/school_diary/all.svg)](https://github.com/VitaliyLobko/school_diary/releases)
