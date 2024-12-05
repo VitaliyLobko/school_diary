@@ -144,3 +144,12 @@ section {
     background: #f2f2f2;
     color: #999;
 }
+
+ .accordion-button:active,
+  .accordion-button:not(.collapsed) {
+    background-color: #9C9C9C;
+    color: #FFF;
+    font-weight: 500;
+  }
+
+

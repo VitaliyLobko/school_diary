@@ -41,7 +41,6 @@ async def create_discipline(body: DisciplineModel, db: Session = Depends(get_db)
     "/",
     response_model=List[DisciplineResponse],
     name="List of all disciplines",
-    dependencies=[Depends(allowed_operation_get)],
 )
 async def get_disciplines(
     request: Request,

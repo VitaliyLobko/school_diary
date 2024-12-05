@@ -2,7 +2,7 @@ from typing import List
 
 from sqlalchemy import func, desc
 from sqlalchemy.orm import Session
-from src.database.models import Student, Grade, Group
+from src.database.models import Student, Grade, Group, Contact
 from src.schemas.students import StudentModel, StudentIsActiveModel
 
 
@@ -136,6 +136,20 @@ async def get_student_by_id(student_id: int, db: Session) -> Student | None:
     )
 
     return student
+
+
+async def get_student_contacts(student_id: int, db: Session) -> List[Contact]:
+    contacts = (
+        db.query(
+            Contact.contact_type,
+            Contact.contact_value,
+        )
+        .filter_by(person_id=student_id)
+        .filter_by(person_types="student")
+        .order_by(desc(Contact.contact_type))
+        .all()
+    )
+    return contacts
 
 
 async def update_student(body: StudentModel, student: int, db: Session):

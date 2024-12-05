@@ -16,7 +16,7 @@
                         </thead>
                         <tbody>
                         {% for group in groups %}
-                        <tr onclick="window.location.href='/groups/{{ group.id }}';" style="cursor: pointer;">
+                        <tr>
                             <th scope="row">{{ offset + loop.index }}</th>
                             <td>{{ group.name }}</td>
                         </tr>

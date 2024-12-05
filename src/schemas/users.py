@@ -16,8 +16,8 @@ class UserResponse(BaseModel):
     avatar: str
     roles: Role
 
-    class Config:
-        from_attributes = True
+    # class Config:
+    #     from_attributes = True
 
 
 class TokenModel(BaseModel):

@@ -55,7 +55,7 @@
                         </thead>
                         <tbody>
                         {% for grade in grades %}
-                        <tr onclick="window.location.href='/grades/{{ grade.id }}';" style="cursor: pointer;">
+                        <tr>
                             <th scope="row">{{ offset + loop.index }}</th>
                             <td>{{ grade.id }}</td>
                             <td>{{ grade.date_of }}</td>
