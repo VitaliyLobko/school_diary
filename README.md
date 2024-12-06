@@ -5,6 +5,7 @@
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/VitaliyLobko/school_diary/issues)
 [![GitHub release](https://img.shields.io/github/release/VitaliyLobko/school_diary/all.svg)](https://github.com/VitaliyLobko/school_diary/releases)
 <img src="https://img.shields.io/badge/GitHub?style=for-the-badge&logo=GitHub&logoColor=white">
+<img src="https://img.shields.io/badge/GitHub-black?style=for-the-badge&logo=GitHub&logoColor=white">
 ---
 ### Features
 - CRUD methods implemented for all entities.
