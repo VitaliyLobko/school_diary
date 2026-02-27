@@ -5,10 +5,7 @@ from src.database.models import Group
 from src.schemas.groups import GroupModel
 from src.repository.groups import (
     create_group,
-    get_all,
     get_groups,
-    update_group,
-    delete_group,
 )
 
 

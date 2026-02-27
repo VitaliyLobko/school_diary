@@ -8,10 +8,8 @@ from sqlalchemy import (
     Boolean,
     func,
     DateTime,
-    event,
     Enum,
 )
-from sqlalchemy.dialects.postgresql import ENUM
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship, declarative_base
 

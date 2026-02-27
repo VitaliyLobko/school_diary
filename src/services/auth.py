@@ -11,10 +11,7 @@ from sqlalchemy.orm import Session
 from jose import JWTError, jwt
 from src.database.db import get_db
 from src.repository import users as repository_user
-from src.database.models import User
 import pickle
-
-from src.repository.users import get_user_by_email
 
 config = configparser.ConfigParser()
 file_config = pathlib.Path(__file__).parent.parent.joinpath("conf/config.ini")
@@ -69,7 +66,7 @@ async def get_current_user(
                 raise credentials_exception
         else:
             raise credentials_exception
-    except JWTError as e:
+    except JWTError:
         raise credentials_exception
 
     # user = await repository_user.get_user_by_email(email, db)

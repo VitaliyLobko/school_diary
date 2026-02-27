@@ -1,8 +1,4 @@
-from datetime import datetime
-from typing import Annotated
-from annotated_types import MinLen, MaxLen
-from pydantic import BaseModel, Field, EmailStr
-from src.database.models import Role
+from pydantic import BaseModel
 
 
 class ContactModel(BaseModel):

@@ -143,5 +143,5 @@ async def delete_student(
     if teacher is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Student not found",
+            detail="Student not found",
         )

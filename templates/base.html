@@ -105,19 +105,19 @@
                                                     <div class="modal-dialog modal-sm">
                                                         <div class="modal-content bg-light">
                                                             <div class="modal-body">
-                                                                <form action="/signup" method="post" enctype=multipart/form-data>
+                                                                <form id="signup-form" action="/signup" method="post">
                                                                     <div class="mb-3">
                                                                         <input type="email" name="username" class="form-control bg-light"
-                                                                               id="username"
+                                                                               id="signup-username"
                                                                                aria-describedby="username" placeholder="name@example.com">
                                                                     </div>
                                                                     <div class="mb-3">
                                                                         <input type="password" name="password" class="form-control bg-light"
-                                                                               id="password" placeholder="password">
+                                                                               id="signup-password" placeholder="password">
                                                                     </div>
                                                                     <div class="mb-3 form-check">
                                                                     </div>
-                                                                    <button class="btn btn-outline-secondary">Cancel</button>
+                                                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
                                                                     <button type="submit" class="btn btn-outline-danger">Sign in</button>
                                                                 </form>
                                                             </div>
@@ -131,15 +131,15 @@
                             <div class="modal-dialog modal-sm">
                                 <div class="modal-content bg-light">
                                     <div class="modal-body">
-                                        <form action="/login" method="post">
+                                        <form id="login-form" action="/login" method="post">
                                             <div class="mb-3">
                                                 <input type="email" name="username" class="form-control"
-                                                       id="exampleInputEmail1"
+                                                       id="login-email"
                                                        aria-describedby="emailHelp" placeholder="name@example.com">
                                             </div>
                                             <div class="mb-3">
                                                 <input type="password" name="password" class="form-control"
-                                                       id="exampleInputPassword1" placeholder="password">
+                                                       id="login-password" placeholder="password">
                                             </div>
                                             <button type="submit" class="btn btn-primary">Log in</button>
                                         </form>

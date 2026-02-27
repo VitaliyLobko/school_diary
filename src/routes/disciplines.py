@@ -101,5 +101,5 @@ async def delete_discipline(
     if discipline is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Discipline not found",
+            detail="Discipline not found",
         )

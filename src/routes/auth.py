@@ -1,25 +1,24 @@
 from fastapi import (
+    APIRouter,
+    BackgroundTasks,
     Depends,
     HTTPException,
-    status,
-    APIRouter,
     Request,
-    BackgroundTasks,
+    status,
 )
 from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
-from src.repository.users import get_user_by_email
-from src.services.auth import (
-    create_access_token,
-    hash_handler,
-    Hash,
-    get_email_from_token,
-)
 from src.database.db import get_db
 from src.repository import users as repository_user
-from fastapi.templating import Jinja2Templates
-from src.schemas.users import UserModel, UserResponse, TokenModel, RequestEmail
+from src.repository.users import get_user_by_email
+from src.schemas.users import RequestEmail, TokenModel, UserModel, UserResponse
+from src.services.auth import (
+    create_access_token,
+    get_email_from_token,
+    hash_handler,
+)
 from src.services.email import send_email
 
 router = APIRouter(tags=["auth"])
@@ -30,18 +29,56 @@ templates = Jinja2Templates(directory="templates")
     "/signup", response_model=UserResponse, status_code=status.HTTP_201_CREATED
 )
 async def signup(
-    body: UserModel,
     background_tasks: BackgroundTasks,
     request: Request,
     db: Session = Depends(get_db),
 ):
+    """Create a new user.
+
+    The client may submit either a JSON body or standard form data. When the
+    request has a JSON content type we parse it directly; otherwise we fall
+    back to reading `Request.form()` so that simple HTML forms work without
+    JavaScript.  This keeps existing tests unchanged (they send JSON) while
+    resolving the ``model_attributes_type`` error observed when a
+    multipart/form-data payload reached the endpoint.
+    """
+    # determine how the data was sent
+    content_type = request.headers.get("content-type", "")
+    if content_type.startswith("application/json"):
+        data = await request.json()
+    else:
+        form = await request.form()
+        data = {"username": form.get("username"), "password": form.get("password")}
+        # HTML form only includes a single "username" field that holds the
+        # user's email address.  The Pydantic model requires a separate
+        # `email` field, so mirror it here when missing.
+        if "email" not in data or not data.get("email"):
+            data["email"] = data.get("username")
+
+    # validate and convert; catch validation errors so they surface as 4xx
+    try:
+        body = UserModel(**data)
+    except Exception as exc:  # ValidationError raised by pydantic
+        # If it's a Pydantic error, convert to HTTPException with details.
+        # The exception message is already pretty reasonable, but we want to
+        # avoid an unhandled 500 that users see when they submit bad input.
+        from pydantic import ValidationError
+
+        if isinstance(exc, ValidationError):
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=exc.errors(),
+            )
+        raise
+
     exist_user = await repository_user.get_user_by_email(body.username, db)
     if exist_user:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, detail="Account already exists"
         )
-    password = hash_handler.get_password_hash(body.password)
-    new_user = await repository_user.create_user(body, password, db)
+
+    password_hash = hash_handler.get_password_hash(body.password)
+    new_user = await repository_user.create_user(body, password_hash, db)
     background_tasks.add_task(
         send_email, new_user.email, new_user.username, str(request.base_url)
     )

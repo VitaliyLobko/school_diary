@@ -1,20 +1,21 @@
-from _pydatetime import date
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from random import choice, randint
+
 from faker import Faker
-from fastapi import Depends, APIRouter
+from fastapi import APIRouter, Depends
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+
+from src.database.db import get_db
 from src.database.models import (
-    Teacher,
-    Student,
+    Contact,
     Discipline,
     Grade,
     Group,
-    Contact,
     Role,
+    Student,
+    Teacher,
 )
-from src.database.db import get_db
 from src.services.roles import RoleAccess
 
 router = APIRouter(prefix="/seed", tags=["seed"])

@@ -1,15 +1,17 @@
 import pathlib
 import time
+
 import uvicorn
-from fastapi import FastAPI, Depends, HTTPException, Request
-from fastapi.templating import Jinja2Templates
+from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.staticfiles import StaticFiles
-from sqlalchemy.orm import Session
+from fastapi.templating import Jinja2Templates
 from sqlalchemy import text
+from sqlalchemy.orm import Session
 from starlette.middleware.cors import CORSMiddleware
-from starlette.responses import JSONResponse, HTMLResponse
+from starlette.responses import HTMLResponse
+
 from src.database.db import get_db
-from src.routes import students, teachers, groups, disciplines, grades, seed, auth
+from src.routes import auth, disciplines, grades, groups, seed, students, teachers
 
 app = FastAPI()
 

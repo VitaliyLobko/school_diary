@@ -17,7 +17,6 @@ from src.database.models import Group, Role
 from src.services.roles import RoleAccess
 from src.schemas.groups import GroupModel, GroupResponse
 
-
 router = APIRouter(prefix="/groups", tags=["groups"])
 templates = Jinja2Templates(directory="templates")
 
@@ -102,5 +101,5 @@ async def delete_group(
     if group is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Group not found",
+            detail="Group not found",
         )

@@ -1,6 +1,5 @@
 from typing import List
 
-import redis
 from fastapi import (
     Depends,
     HTTPException,
@@ -18,7 +17,6 @@ from src.services.roles import RoleAccess
 from src.schemas.grades import GradeModel, GradeResponse
 from src.repository import grades as repository_grade
 from src.repository import disciplines as repository_disciplines
-
 
 router = APIRouter(prefix="/grades", tags=["grades"])
 templates = Jinja2Templates(directory="templates")

@@ -4,7 +4,6 @@ from annotated_types import MinLen, MaxLen
 from pydantic import BaseModel
 
 
-
 class TeacherModel(BaseModel):
     is_active: bool = True
     first_name: Annotated[str, MinLen(2), MaxLen(250)]
